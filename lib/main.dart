@@ -1,9 +1,17 @@
-import 'package:dropspot/components/CameraButton';
-import 'package:dropspot/components/ImageViewer';
+import 'dart:async';
+
+import 'package:dropspot/components/camera_button.dart';
+import 'package:dropspot/components/image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
 
 void main() {
-  runApp(const DropspotApp());
+  runZonedGuarded(
+    () => runApp(DropspotApp()),
+    (error, stackTrace) {
+      Logger().e('error: $error, stackTrace: $stackTrace');
+    },
+  );
 }
 
 class DropspotApp extends StatelessWidget {

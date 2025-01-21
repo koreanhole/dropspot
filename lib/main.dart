@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ImageViewer(),
-            CameraButton(onImageCaptured: (image) => print("hello"))
+            CameraButton(),
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

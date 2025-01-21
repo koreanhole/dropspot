@@ -1,6 +1,7 @@
-import 'package:dropspot/utils/image_utils.dart';
+import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class CameraButton extends StatelessWidget {
   const CameraButton({super.key});
@@ -15,8 +16,10 @@ class CameraButton extends StatelessWidget {
         requestFullMetadata: false,
         preferredCameraDevice: CameraDevice.rear,
       );
-      if (pickedFile != null) {
-        ImageUtils().saveImageToFiles(image: pickedFile);
+      if (pickedFile != null && context.mounted) {
+        await context
+            .read<ParkingImageProvider>()
+            .saveImageToFiles(image: pickedFile);
       }
     }
 

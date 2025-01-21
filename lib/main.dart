@@ -2,12 +2,21 @@ import 'dart:async';
 
 import 'package:dropspot/components/camera_button.dart';
 import 'package:dropspot/components/image_viewer.dart';
+import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runZonedGuarded(
-    () => runApp(DropspotApp()),
+    () => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ParkingImageProvider()),
+        ],
+        child: const DropspotApp(),
+      ),
+    ),
     (error, stackTrace) {
       Logger().e('error: $error, stackTrace: $stackTrace');
     },

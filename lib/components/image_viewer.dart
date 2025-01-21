@@ -8,6 +8,9 @@ class ImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parkingImageProvider = context.watch<ParkingImageProvider>();
-    return Image.asset(parkingImageProvider.imagePath);
+    return Image.asset(
+      parkingImageProvider.imagePath,
+      fit: BoxFit.cover,
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dropspot/components/camera_button.dart';
 import 'package:dropspot/components/image_viewer.dart';
+import 'package:dropspot/components/recognized_text.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
@@ -54,6 +55,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ImageViewer(),
+            RecognizedParkingText(),
             CameraButton(),
           ],
         ),

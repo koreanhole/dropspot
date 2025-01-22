@@ -1,4 +1,4 @@
-import 'package:dropspot/providers/parking_image_datetime_provider.dart';
+import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +8,7 @@ class ImageDateTimeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parkingImageDateTime =
-        context.watch<ParkingImageDateTimeProvider>().imageDateTime;
+        context.watch<ParkingImageExifProvider>().imageDateTime;
 
     return parkingImageDateTime == null
         ? SizedBox.shrink()

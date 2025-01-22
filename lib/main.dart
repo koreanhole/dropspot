@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dropspot/providers/parking_image_datetime_provider.dart';
+import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:dropspot/providers/parking_recognized_text_provider.dart';
 import 'package:dropspot/screens/home_screen.dart';
@@ -25,12 +25,12 @@ void main() {
             },
           ),
           ChangeNotifierProxyProvider<ParkingImageProvider,
-              ParkingImageDateTimeProvider>(
-            create: (_) => ParkingImageDateTimeProvider(),
+              ParkingImageExifProvider>(
+            create: (_) => ParkingImageExifProvider(),
             update: (_, parkingImageProvider, parkingImageDateTimeProvider) {
-              parkingImageDateTimeProvider ??= ParkingImageDateTimeProvider();
+              parkingImageDateTimeProvider ??= ParkingImageExifProvider();
               parkingImageDateTimeProvider
-                  .setParkingImageDateTime(parkingImageProvider.imagePath);
+                  .setParkingImageExifData(parkingImageProvider.imagePath);
               return parkingImageDateTimeProvider;
             },
           ),

@@ -11,6 +11,8 @@ const String defaultImagePath = 'assets/samples/sample.png';
 class ParkingImageProvider with ChangeNotifier {
   String get imagePath => _image?.path ?? defaultImagePath;
 
+  File? _image;
+
   ParkingImageProvider() {
     _getParkingImage().then((File parkingImage) {
       if (parkingImage.existsSync()) {
@@ -20,8 +22,6 @@ class ParkingImageProvider with ChangeNotifier {
       }
     });
   }
-
-  File? _image;
 
   Future<void> saveImageToFiles({required XFile image}) async {
     final File savedParkingImage = await _getParkingImage();

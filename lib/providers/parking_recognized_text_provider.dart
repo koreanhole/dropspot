@@ -11,6 +11,7 @@ class ParkingRecognizedTextProvider with ChangeNotifier {
 
   void setRecognizedText(String imagePath) async {
     _recognizedText = await _performOCR(imagePath);
+    Logger().d('Recognized text: $_recognizedText');
     notifyListeners();
   }
 

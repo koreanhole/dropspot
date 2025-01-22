@@ -14,7 +14,7 @@ class RecognizedParkingText extends StatefulWidget {
 }
 
 class _RecognizedParkingTextState extends State<RecognizedParkingText> {
-  String _extractedText = "";
+  String? _extractedText;
 
   Future<void> _performOCR(String imagePath) async {
     final textRecognizer = TextRecognizer();
@@ -31,13 +31,6 @@ class _RecognizedParkingTextState extends State<RecognizedParkingText> {
       setState(() {
         _extractedText = recognizedText.text; // 전체 텍스트
       });
-
-      // 블록 단위로 텍스트를 추출하고 싶다면 아래 코드 사용 가능
-      for (TextBlock block in recognizedText.blocks) {
-        for (TextLine line in block.lines) {
-          print(line.text); // 라인 단위 텍스트 출력
-        }
-      }
     } catch (e) {
       Logger().e("OCR 에러: $e");
     } finally {
@@ -55,7 +48,9 @@ class _RecognizedParkingTextState extends State<RecognizedParkingText> {
           onPressed: () => _performOCR(parkingImageProvider.imagePath),
           child: Text('ocr 실행'),
         ),
-        Text("인식된 텍스트: $_extractedText"),
+        _extractedText == null
+            ? SizedBox.shrink()
+            : Text("인식된 텍스트: $_extractedText"),
       ],
     );
   }

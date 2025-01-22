@@ -9,20 +9,33 @@ const String imageFileName = 'parking_image.jpg';
 const String defaultImagePath = 'assets/samples/sample.png';
 
 class ParkingImageProvider with ChangeNotifier {
-  File? _image;
-
   String get imagePath => _image?.path ?? defaultImagePath;
 
+  ParkingImageProvider() {
+    _getParkingImage().then((File parkingImage) {
+      if (parkingImage.existsSync()) {
+        _image = parkingImage;
+        notifyListeners();
+        Logger().d('ParkingImage loaded');
+      }
+    });
+  }
+
+  File? _image;
+
   Future<void> saveImageToFiles({required XFile image}) async {
+    final File savedParkingImage = await _getParkingImage();
+    final List<int> imageBytes = await image.readAsBytes();
+    _image =
+        await savedParkingImage.writeAsBytes(imageBytes, mode: FileMode.write);
+    notifyListeners();
+    Logger().d('ParkingImage saved');
+  }
+
+  Future<File> _getParkingImage() async {
     final Directory directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
-    final File targetFile =
-        File('$path/$imageFileName${DateTime.now().microsecondsSinceEpoch}');
-    final List<int> imageBytes = await image.readAsBytes();
-    final File savedImage =
-        await targetFile.writeAsBytes(imageBytes, mode: FileMode.write);
-    _image = savedImage;
-    Logger().d('Image saved to: ${savedImage.path}');
-    notifyListeners();
+    final File parkingImage = File('$path/$imageFileName');
+    return parkingImage;
   }
 }

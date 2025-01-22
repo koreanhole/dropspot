@@ -7,10 +7,11 @@ class ImageViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final parkingImageProvider = context.watch<ParkingImageProvider>();
+    final parkingImagePath = context.watch<ParkingImageProvider>().imagePath;
     return Image.asset(
-      parkingImageProvider.imagePath,
+      parkingImagePath,
       fit: BoxFit.cover,
+      key: ValueKey(DateTime.now().millisecondsSinceEpoch),
     );
   }
 }

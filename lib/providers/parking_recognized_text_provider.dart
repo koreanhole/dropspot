@@ -9,13 +9,9 @@ class ParkingRecognizedTextProvider with ChangeNotifier {
 
   String? get recognizedText => _recognizedText;
 
-  void setRecognizedText(String imagePath) {
-    _performOCR(imagePath).then((text) {
-      _recognizedText = text;
-      notifyListeners();
-    }).catchError((e) {
-      Logger().e("OCR 에러: $e");
-    });
+  void setRecognizedText(String imagePath) async {
+    _recognizedText = await _performOCR(imagePath);
+    notifyListeners();
   }
 
   Future<String?> _performOCR(String imagePath) async {

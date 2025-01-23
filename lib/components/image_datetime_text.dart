@@ -54,6 +54,8 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
         textBaseline: TextBaseline.alphabetic,
         children: [
           HomeScreenLeftSpacer,
+          Text("주차한 지"),
+          SizedBox(width: 8),
           Text(
             it,
             style: TextStyle(

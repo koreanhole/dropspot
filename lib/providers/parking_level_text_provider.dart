@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:logger/logger.dart';
 
-class ParkingRecognizedTextProvider with ChangeNotifier {
-  String? _recognizedText;
+var basementParkingPattern = RegExp(r'b\s*(\d+)', caseSensitive: false);
 
-  String? get recognizedText => _recognizedText;
+class ParkingLevelTextProvider with ChangeNotifier {
+  String? _recognizedLevelText;
+
+  String? get recognizedLevelText => _recognizedLevelText;
 
   void setRecognizedText(String imagePath) async {
-    _recognizedText = await _performOCR(imagePath);
-    Logger().d('Recognized text: $_recognizedText');
+    _recognizedLevelText = await _performOCR(imagePath);
+    Logger().d('Recognized level text: $_recognizedLevelText');
     notifyListeners();
   }
 
@@ -28,10 +30,13 @@ class ParkingRecognizedTextProvider with ChangeNotifier {
       );
       for (TextBlock block in recognizedText.blocks) {
         for (TextLine line in block.lines) {
-          print(line.text);
+          Logger().i('Recognized text: ${line.text}');
+          for (var match in basementParkingPattern.allMatches(line.text)) {
+            return '지하${match.group(1)}층';
+          }
         }
       }
-      return recognizedText.text;
+      return null;
     } finally {
       textRecognizer.close();
     }

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
-import 'package:dropspot/providers/parking_recognized_text_provider.dart';
+import 'package:dropspot/providers/parking_level_text_provider.dart';
 import 'package:dropspot/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/web.dart';
@@ -15,13 +15,13 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => ParkingImageProvider()),
           ChangeNotifierProxyProvider<ParkingImageProvider,
-              ParkingRecognizedTextProvider>(
-            create: (_) => ParkingRecognizedTextProvider(),
-            update: (_, parkingImageProvider, parkingRecognizedTextProvider) {
-              parkingRecognizedTextProvider ??= ParkingRecognizedTextProvider();
-              parkingRecognizedTextProvider
+              ParkingLevelTextProvider>(
+            create: (_) => ParkingLevelTextProvider(),
+            update: (_, parkingImageProvider, parkingLevelTextProvider) {
+              parkingLevelTextProvider ??= ParkingLevelTextProvider();
+              parkingLevelTextProvider
                   .setRecognizedText(parkingImageProvider.imagePath);
-              return parkingRecognizedTextProvider;
+              return parkingLevelTextProvider;
             },
           ),
           ChangeNotifierProxyProvider<ParkingImageProvider,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 const String imageExifDateTimeKey = 'Image DateTime';
@@ -9,8 +10,16 @@ const String imageExifDateTimeKey = 'Image DateTime';
 class ParkingImageExifProvider with ChangeNotifier {
   Map<String, IfdTag>? _imageExifData;
 
-  String? get imageDateTime =>
-      _imageExifData?[imageExifDateTimeKey]?.toString();
+  DateTime? get imageDateTime {
+    final imageDateTimeString =
+        _imageExifData?[imageExifDateTimeKey]?.toString();
+    if (imageDateTimeString != null) {
+      final dateFormat = DateFormat('yyyy:MM:dd HH:mm:ss');
+      return dateFormat.parse(imageDateTimeString);
+    } else {
+      return null;
+    }
+  }
 
   void setParkingImageExifData(String imagePath) async {
     _imageExifData = await _getImageExifData(imagePath);

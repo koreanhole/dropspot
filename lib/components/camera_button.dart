@@ -23,9 +23,10 @@ class CameraButton extends StatelessWidget {
       }
     }
 
-    return ElevatedButton(
-      onPressed: openCamera,
-      child: Text("Open Camera"),
+    return FloatingActionButton(
+      onPressed: () => openCamera(),
+      shape: CircleBorder(),
+      child: Icon(Icons.add),
     );
   }
 }

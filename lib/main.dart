@@ -54,6 +54,18 @@ class DropspotApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue,
         brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            color: Colors.black,
+          ),
+          bodyMedium: TextStyle(
+            color: Colors.black,
+          ),
+          bodySmall: TextStyle(
+            color: Colors.black,
+          ),
+        ),
       ),
       home: const HomeScreen(),
     );

@@ -9,7 +9,7 @@ class ImageViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     final parkingImagePath = context.watch<ParkingImageProvider>().imagePath;
     return SizedBox(
-      width: MediaQuery.of(context).size.width, // 화면 너비의 80%
+      width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.width,
       child: Image.asset(
         parkingImagePath,

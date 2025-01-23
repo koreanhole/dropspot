@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:dropspot/components/camera_button.dart';
+import 'package:dropspot/components/add_parking_image_button.dart';
 import 'package:dropspot/components/image_datetime_text.dart';
 import 'package:dropspot/components/image_viewer.dart';
 import 'package:dropspot/components/recognized_parking_level_text.dart';
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 16),
             ImageViewer(),
             SizedBox(height: 16),
-            CameraButton(),
+            AddParkingImageButton(),
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

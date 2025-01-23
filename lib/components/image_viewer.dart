@@ -8,10 +8,14 @@ class ImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parkingImagePath = context.watch<ParkingImageProvider>().imagePath;
-    return Image.asset(
-      parkingImagePath,
-      fit: BoxFit.cover,
-      key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width, // 화면 너비의 80%
+      height: MediaQuery.of(context).size.width,
+      child: Image.asset(
+        parkingImagePath,
+        fit: BoxFit.cover,
+        key: ValueKey(DateTime.now().millisecondsSinceEpoch),
+      ),
     );
   }
 }

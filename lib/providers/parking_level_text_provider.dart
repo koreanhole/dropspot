@@ -30,8 +30,8 @@ class ParkingLevelTextProvider with ChangeNotifier {
       );
       for (TextBlock block in recognizedText.blocks) {
         for (TextLine line in block.lines) {
-          Logger().i('Recognized text: ${line.text}');
           for (var match in basementParkingPattern.allMatches(line.text)) {
+            Logger().i('Recognized text: ${line.text}');
             return '지하${match.group(1)}층';
           }
         }

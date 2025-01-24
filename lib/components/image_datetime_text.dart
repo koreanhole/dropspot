@@ -21,6 +21,7 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
   @override
   void initState() {
     super.initState();
+    _updateParkingElapsedTime();
     _startTimer();
   }
 
@@ -30,19 +31,23 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
     super.dispose();
   }
 
+  void _updateParkingElapsedTime() {
+    final parkingImageDateTime =
+        context.read<ParkingImageExifProvider>().imageDateTime;
+    if (parkingImageDateTime == null) {
+      return;
+    }
+    setState(() {
+      _parkingElapsedTime = TimeUtil.getTimeDifference(
+        DateTime.now(),
+        parkingImageDateTime,
+      );
+    });
+  }
+
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      final parkingImageDateTime =
-          context.read<ParkingImageExifProvider>().imageDateTime;
-      if (parkingImageDateTime == null) {
-        return;
-      }
-      setState(() {
-        _parkingElapsedTime = TimeUtil.getTimeDifference(
-          DateTime.now(),
-          parkingImageDateTime,
-        );
-      });
+      _updateParkingElapsedTime();
     });
   }
 

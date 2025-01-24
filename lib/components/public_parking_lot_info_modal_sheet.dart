@@ -14,20 +14,19 @@ class PublicParkingLotInfoModalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(Icons.close),
-                ),
-                Text(publicParkingInfo.toJson().toString()),
-              ],
+    return SafeArea(
+      top: false,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: Icon(Icons.close),
             ),
-          )),
+            Text(publicParkingInfo.toJson().toString()),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dropspot/base/data/bottom_tab_item.dart';
+import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:dropspot/providers/parking_level_text_provider.dart';
@@ -86,13 +87,36 @@ class _DropspotAppState extends State<DropspotApp> {
     return MaterialApp(
       title: 'Dropspot',
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: primaryColor,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
+        scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: backgroundColor,
           elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: primaryColor),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: backgroundColor,
+          selectedItemColor: primaryColor,
+          selectedIconTheme: const IconThemeData(size: 24),
+          selectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+          ),
+          unselectedIconTheme: const IconThemeData(size: 24),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: primaryColor,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          foregroundColor: primaryColor,
+          backgroundColor: secondaryColor,
+          elevation: 3,
+          highlightElevation: 3,
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(

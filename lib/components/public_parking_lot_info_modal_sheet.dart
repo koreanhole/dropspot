@@ -46,6 +46,9 @@ class PublicParkingLotInfoModalSheet extends StatelessWidget {
             _PublicParkingLotTimeInfo(publicParkingInfo: publicParkingInfo),
             SizedBox(height: 12),
             _PublicParkingLotDataInfo(publicParkingInfo: publicParkingInfo),
+            SizedBox(height: 12),
+            _PublicParkingLotInfoActionButton(
+                publicParkingInfo: publicParkingInfo),
           ],
         ),
       ),
@@ -202,9 +205,20 @@ class _PublicParkingLotInfoActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => Navigator.of(context).pop(),
-      icon: Icon(Icons.close),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _PublicParkingInfoActionButton(
+          label: "닫기",
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        SizedBox(width: 12),
+        _PublicParkingInfoActionButton(
+          label: "지도앱에서 보기",
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }
@@ -226,6 +240,34 @@ class _PublicParkingInfoBackground extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class _PublicParkingInfoActionButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  const _PublicParkingInfoActionButton(
+      {required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(secondaryColor),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: defaultBoxBorderRadius),
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: primaryColor,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );

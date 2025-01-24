@@ -1,9 +1,11 @@
 import 'package:dropspot/base/json_util.dart';
 import 'package:dropspot/base/location_util.dart';
+import 'package:dropspot/components/public_parking_lot_info_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:logger/logger.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 const defaultMapZoom = 16.0;
 const naverMapClientIdKey = 'NAVER_MAP_CLIENT_ID';
@@ -54,14 +56,25 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
     final publicParkingMarkers = publicParkingInfos
         .map((info) {
           try {
-            // 예외가 발생하지 않을 경우 정상적으로 NMarker 생성
-            return NMarker(
+            final marker = NMarker(
               id: info.parkingLotId,
               position: NLatLng(
                 double.parse(info.latitude),
                 double.parse(info.longitude),
               ),
             );
+            marker.setOnTapListener((marker) {
+              showMaterialModalBottomSheet(
+                context: context,
+                expand: false,
+                duration: Duration(milliseconds: 200),
+                builder: (context) => PublicParkingLotInfoModalSheet(
+                  mapMarker: marker,
+                  publicParkingInfo: info,
+                ),
+              );
+            });
+            return marker;
           } catch (e) {
             // 예외 발생 시 null 반환
             return null;

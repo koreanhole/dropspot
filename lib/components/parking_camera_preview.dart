@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -54,10 +55,10 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _cameraController != null && _cameraController!.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: 1, // 1:1 비율 설정
+            ? CameraAspectRatioPreset(
                 child: ClipRect(
                   child: OverflowBox(
                     alignment: Alignment.center,
@@ -72,14 +73,12 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
                   ),
                 ),
               )
-            : SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width,
+            : CameraAspectRatioPreset(
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
               ),
-        SizedBox(height: 16),
+        SizedBox(height: 32),
         FloatingActionButton(
           onPressed: captureImage,
           shape: CircleBorder(),

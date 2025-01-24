@@ -54,13 +54,12 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
   @override
   Widget build(BuildContext context) {
     return _parkingElapsedTime.letOrElse(
-      (it) => Row(
-        crossAxisAlignment: CrossAxisAlignment.baseline,
+      (it) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          HomeScreenLeftSpacer,
-          Text("주차한 지"),
-          SizedBox(width: 8),
+          Text("주차시간"),
           Text(
             it,
             style: TextStyle(
@@ -68,8 +67,6 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(width: 8),
-          Text("경과"),
         ],
       ),
       orElse: () => SizedBox.shrink(),

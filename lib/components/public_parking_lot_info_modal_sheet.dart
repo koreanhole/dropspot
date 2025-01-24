@@ -1,6 +1,7 @@
 import 'package:dropspot/base/data/public_parking_info.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
+import 'package:dropspot/components/info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
@@ -31,14 +32,9 @@ class PublicParkingLotInfoModalSheet extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 8),
-            Icon(
-              Icons.drag_handle_rounded,
-              size: 32,
-              color: darkGrey,
-            ),
-            SizedBox(height: 8),
+            SizedBox(height: 24),
             _PublicParkingLotInfoTitle(publicParkingInfo: publicParkingInfo),
+            SizedBox(height: 4),
             _PublicParkingLotInfoSubTitle(publicParkingInfo: publicParkingInfo),
             SizedBox(height: 24),
             _PublicParkingLotFeeInfo(publicParkingInfo: publicParkingInfo),
@@ -62,12 +58,16 @@ class _PublicParkingLotInfoTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+        ),
+        textAlign: TextAlign.center,
+        "${publicParkingInfo.parkingLotName} ${publicParkingInfo.parkingLotType} 주차장(${publicParkingInfo.parkingLotCategory})",
       ),
-      "${publicParkingInfo.parkingLotName} ${publicParkingInfo.parkingLotType} 주차장(${publicParkingInfo.parkingLotCategory})",
     );
   }
 }
@@ -92,7 +92,7 @@ class _PublicParkingLotFeeInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _PublicParkingInfoBackground(
+    return InfoCard(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -135,7 +135,7 @@ class _PublicParkingLotTimeInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _PublicParkingInfoBackground(
+    return InfoCard(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -223,29 +223,6 @@ class _PublicParkingLotInfoActionButton extends StatelessWidget {
   }
 }
 
-class _PublicParkingInfoBackground extends StatelessWidget {
-  final Widget child;
-
-  const _PublicParkingInfoBackground({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: tertiaryColor,
-          borderRadius: defaultBoxBorderRadius,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: child,
-        ),
-      ),
-    );
-  }
-}
-
 class _PublicParkingInfoActionButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
@@ -258,7 +235,7 @@ class _PublicParkingInfoActionButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(secondaryColor),
+        backgroundColor: WidgetStatePropertyAll(tertiaryColor),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: defaultBoxBorderRadius),
         ),

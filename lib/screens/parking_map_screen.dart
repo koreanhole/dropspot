@@ -1,5 +1,6 @@
 import 'package:dropspot/base/json_util.dart';
 import 'package:dropspot/base/location_util.dart';
+import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/public_parking_lot_info_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -65,6 +66,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
             );
             marker.setOnTapListener((marker) {
               showMaterialModalBottomSheet(
+                backgroundColor: backgroundColor,
                 context: context,
                 expand: false,
                 duration: Duration(milliseconds: 200),
@@ -97,6 +99,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
               options: NaverMapViewOptions(
                 locationButtonEnable: true,
                 minZoom: 12,
+                logoClickEnable: false,
               ),
               onMapReady: (controller) {
                 Logger().i("Map Ready");

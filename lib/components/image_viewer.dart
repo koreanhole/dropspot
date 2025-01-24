@@ -1,3 +1,4 @@
+import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,9 +9,7 @@ class ImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final parkingImagePath = context.watch<ParkingImageProvider>().imagePath;
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.width,
+    return CameraAspectRatioPreset(
       child: Image.asset(
         parkingImagePath,
         fit: BoxFit.cover,

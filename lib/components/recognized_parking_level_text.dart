@@ -1,5 +1,4 @@
 import 'package:dropspot/providers/parking_level_text_provider.dart';
-import 'package:dropspot/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dropspot/base/extensions.dart';
@@ -13,11 +12,12 @@ class RecognizedParkingLevelText extends StatelessWidget {
         context.watch<ParkingLevelTextProvider>().recognizedLevelText;
 
     return parkingRecognizedText.letOrElse(
-      (it) => Row(
-        crossAxisAlignment: CrossAxisAlignment.baseline,
+      (it) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          HomeScreenLeftSpacer,
+          Text("주차위치"),
           Text(
             it,
             style: TextStyle(
@@ -25,8 +25,7 @@ class RecognizedParkingLevelText extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(width: 8),
-          Text("에 주차됨"),
+          SizedBox(height: 12),
         ],
       ),
       orElse: () => SizedBox.shrink(),

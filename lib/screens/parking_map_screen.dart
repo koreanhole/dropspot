@@ -1,3 +1,4 @@
+import 'package:dropspot/base/json_util.dart';
 import 'package:dropspot/base/location_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,11 +17,21 @@ class ParkingMapScreen extends StatefulWidget {
 
 class _ParkingMapScreenState extends State<ParkingMapScreen> {
   bool _isMapInitialized = false;
+  List<NMarker>? _publicParkingMarkers;
+  NaverMapController? _mapController;
 
   @override
   void initState() {
     initializeMap();
+    initializePublicParkingMarkers();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mapController?.dispose();
+    _mapController = null;
   }
 
   Future<void> initializeMap() async {
@@ -37,6 +48,34 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
     });
   }
 
+  Future<void> initializePublicParkingMarkers() async {
+    final publicParkingInfos = await JsonUtil().getPublicParkingInfos();
+
+    final publicParkingMarkers = publicParkingInfos
+        .map((info) {
+          try {
+            // 예외가 발생하지 않을 경우 정상적으로 NMarker 생성
+            return NMarker(
+              id: info.parkingLotId,
+              position: NLatLng(
+                double.parse(info.latitude),
+                double.parse(info.longitude),
+              ),
+            );
+          } catch (e) {
+            // 예외 발생 시 null 반환
+            return null;
+          }
+        })
+        .where((marker) => marker != null) // null 값을 필터링
+        .cast<NMarker>() // List<NMarker?>를 List<NMarker>로 변환
+        .toList();
+
+    setState(() {
+      _publicParkingMarkers = publicParkingMarkers;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,11 +83,28 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
           ? NaverMap(
               options: NaverMapViewOptions(
                 locationButtonEnable: true,
+                minZoom: 12,
               ),
-              onMapReady: (controller) async {
+              onMapReady: (controller) {
                 Logger().i("Map Ready");
-                controller
-                    .setLocationTrackingMode(NLocationTrackingMode.follow);
+                _mapController = controller;
+                _mapController
+                    ?.setLocationTrackingMode(NLocationTrackingMode.follow);
+              },
+              onCameraIdle: () async {
+                _mapController?.clearOverlays(type: NOverlayType.marker);
+                final cameraBound = await _mapController?.getContentBounds();
+                final publicParkingMarkers = _publicParkingMarkers;
+                if (cameraBound == null || publicParkingMarkers == null) {
+                  Logger().e('Camera Bound or Markers are null');
+                  return;
+                }
+                for (var marker in publicParkingMarkers) {
+                  final isVisible = cameraBound.containsPoint(marker.position);
+                  if (isVisible) {
+                    _mapController?.addOverlay(marker);
+                  }
+                }
               },
             )
           : Center(child: CircularProgressIndicator()),

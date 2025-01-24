@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:dropspot/base/bottom_tab_item.dart';
+import 'package:dropspot/base/data/bottom_tab_item.dart';
 import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:dropspot/providers/parking_level_text_provider.dart';

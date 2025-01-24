@@ -2,6 +2,11 @@ PODS:
   - camera_avfoundation (0.0.1):
     - Flutter
   - Flutter (1.0.0)
+  - flutter_naver_map (1.3.0):
+    - Flutter
+    - NMapsMap (= 3.19.0)
+  - geolocator_apple (1.2.0):
+    - Flutter
   - google_mlkit_commons (0.9.0):
     - Flutter
     - MLKitVision
@@ -60,6 +65,9 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - NMapsGeometry (1.0.2)
+  - NMapsMap (3.19.0):
+    - NMapsGeometry
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -70,6 +78,8 @@ PODS:
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - Flutter (from `Flutter`)
+  - flutter_naver_map (from `.symlinks/plugins/flutter_naver_map/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - google_mlkit_text_recognition (from `.symlinks/plugins/google_mlkit_text_recognition/ios`)
   - GoogleMLKit/TextRecognition
@@ -90,6 +100,8 @@ SPEC REPOS:
     - MLKitTextRecognitionCommon
     - MLKitVision
     - nanopb
+    - NMapsGeometry
+    - NMapsMap
     - PromisesObjC
 
 EXTERNAL SOURCES:
@@ -97,6 +109,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   Flutter:
     :path: Flutter
+  flutter_naver_map:
+    :path: ".symlinks/plugins/flutter_naver_map/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
   google_mlkit_commons:
     :path: ".symlinks/plugins/google_mlkit_commons/ios"
   google_mlkit_text_recognition:
@@ -111,6 +127,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   camera_avfoundation: dd002b0330f4981e1bbcb46ae9b62829237459a4
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_naver_map: d31b1884517151e7b3121e3b24c18733ef4e4387
+  geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
   google_mlkit_commons: 384e4e206e122b6dad430d3158205e0b2fac6789
   google_mlkit_text_recognition: e540f2aff997f2b0daaa1b4fd5ead3b0b7030adc
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -125,6 +143,8 @@ SPEC CHECKSUMS:
   MLKitTextRecognitionCommon: cd44577a8c506fc6bba065096de03bec0d01a213
   MLKitVision: 45e79d68845a2de77e2dd4d7f07947f0ed157b0e
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
+  NMapsMap: 99c10429d93340780b6f88d3fc7c0a3850b43664
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47

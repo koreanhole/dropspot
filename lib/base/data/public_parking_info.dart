@@ -18,7 +18,7 @@ class PublicParkingInfo {
   final String feeInfo; // 요금정보
   final String basicParkingTime; // 주차기본시간
   final String basicParkingFee; // 주차기본요금
-  final String additionalTimeUnit; // 추가단위시간
+  final String additionalTime; // 추가단위시간
   final String additionalFee; // 추가단위요금
   final String dailyPassTime; // 1일주차권요금적용시간
   final String dailyPassFee; // 1일주차권요금
@@ -54,7 +54,7 @@ class PublicParkingInfo {
     required this.feeInfo,
     required this.basicParkingTime,
     required this.basicParkingFee,
-    required this.additionalTimeUnit,
+    required this.additionalTime,
     required this.additionalFee,
     required this.dailyPassTime,
     required this.dailyPassFee,
@@ -92,7 +92,7 @@ class PublicParkingInfo {
       feeInfo: json['요금정보'] ?? '',
       basicParkingTime: json['주차기본시간'] ?? '',
       basicParkingFee: json['주차기본요금'] ?? '',
-      additionalTimeUnit: json['추가단위시간'] ?? '',
+      additionalTime: json['추가단위시간'] ?? '',
       additionalFee: json['추가단위요금'] ?? '',
       dailyPassTime: json['1일주차권요금적용시간'] ?? '',
       dailyPassFee: json['1일주차권요금'] ?? '',
@@ -131,7 +131,7 @@ class PublicParkingInfo {
       '요금정보': feeInfo,
       '주차기본시간': basicParkingTime,
       '주차기본요금': basicParkingFee,
-      '추가단위시간': additionalTimeUnit,
+      '추가단위시간': additionalTime,
       '추가단위요금': additionalFee,
       '1일주차권요금적용시간': dailyPassTime,
       '1일주차권요금': dailyPassFee,

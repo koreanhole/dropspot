@@ -65,6 +65,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
               ),
             );
             marker.setOnTapListener((marker) {
+              Logger().d("setOnTapListener: ${info.toJson()}");
               showMaterialModalBottomSheet(
                 backgroundColor: backgroundColor,
                 context: context,

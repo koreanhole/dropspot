@@ -117,12 +117,14 @@ class _PublicParkingLotFeeInfo extends StatelessWidget {
           infoSpacing,
           Text(
             style: titleTextStyle,
-            "결제방법",
+            "결제정보",
           ),
-          Text(
-            style: labelTextStyle,
-            publicParkingInfo.paymentMethod,
-          ),
+          publicParkingInfo.feeInfo == "무료"
+              ? Text(style: labelTextStyle, publicParkingInfo.feeInfo)
+              : Text(
+                  style: labelTextStyle,
+                  publicParkingInfo.paymentMethod,
+                ),
         ],
       ),
     );

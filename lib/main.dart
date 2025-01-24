@@ -4,7 +4,6 @@ import 'package:dropspot/base/bottom_tab_item.dart';
 import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:dropspot/providers/parking_level_text_provider.dart';
-import 'package:dropspot/screens/camera_screen.dart';
 import 'package:dropspot/screens/home_screen.dart';
 import 'package:dropspot/screens/more_screen.dart';
 import 'package:dropspot/screens/parking_map_screen.dart';

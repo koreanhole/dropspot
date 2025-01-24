@@ -32,6 +32,7 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
     _cameraController = CameraController(
       cameras[0], // 첫 번째 카메라 사용
       ResolutionPreset.high,
+      enableAudio: false,
     );
 
     await _cameraController?.initialize();
@@ -71,7 +72,13 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
                   ),
                 ),
               )
-            : Center(child: CircularProgressIndicator()),
+            : SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
         SizedBox(height: 16),
         FloatingActionButton(
           onPressed: captureImage,

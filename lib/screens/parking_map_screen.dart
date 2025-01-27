@@ -99,7 +99,6 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
           ? NaverMap(
               options: NaverMapViewOptions(
                 locationButtonEnable: true,
-                minZoom: 12,
                 logoClickEnable: false,
               ),
               onMapReady: (controller) {

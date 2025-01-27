@@ -1,3 +1,4 @@
+import 'package:dropspot/base/drop_spot_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class MoreScreen extends StatelessWidget {
@@ -5,9 +6,12 @@ class MoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('More Screen'),
+    return Scaffold(
+      appBar: DropSpotAppBar(title: "더보기"),
+      body: SafeArea(
+        child: Center(
+          child: Text('More Screen'),
+        ),
       ),
     );
   }

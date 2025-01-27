@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/time_util.dart';
-import 'package:dropspot/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

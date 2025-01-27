@@ -18,5 +18,6 @@ class DropSpotAppBar extends AppBar {
           ),
           iconTheme: IconThemeData(color: primaryColor),
           backgroundColor: backgroundColor,
+          elevation: 0,
         );
 }

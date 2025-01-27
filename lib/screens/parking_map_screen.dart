@@ -70,7 +70,6 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
                 backgroundColor: backgroundColor,
                 context: context,
                 expand: false,
-                duration: Duration(milliseconds: 200),
                 builder: (context) => PublicParkingLotInfoModalSheet(
                   mapMarker: marker,
                   publicParkingInfo: info,

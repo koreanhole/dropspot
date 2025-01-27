@@ -2,8 +2,10 @@ import 'package:dropspot/base/data/public_parking_info.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
 import 'package:dropspot/components/info_card.dart';
+import 'package:dropspot/components/open_in_maps_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 final titleTextStyle = TextStyle(
   fontSize: 12,
@@ -44,7 +46,8 @@ class PublicParkingLotInfoModalSheet extends StatelessWidget {
             _PublicParkingLotDataInfo(publicParkingInfo: publicParkingInfo),
             SizedBox(height: 12),
             _PublicParkingLotInfoActionButton(
-                publicParkingInfo: publicParkingInfo),
+              publicParkingInfo: publicParkingInfo,
+            ),
           ],
         ),
       ),
@@ -218,7 +221,13 @@ class _PublicParkingLotInfoActionButton extends StatelessWidget {
         SizedBox(width: 12),
         _PublicParkingInfoActionButton(
           label: "지도앱에서 보기",
-          onPressed: () {},
+          onPressed: () => showMaterialModalBottomSheet(
+            context: context,
+            backgroundColor: backgroundColor,
+            builder: (context) => OpenInMapsModalSheet(
+              publicParkingInfo: publicParkingInfo,
+            ),
+          ),
         ),
       ],
     );

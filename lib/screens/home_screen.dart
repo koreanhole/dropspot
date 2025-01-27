@@ -17,7 +17,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton: AddParkingImageButton(),
       body: SafeArea(
-        child: Center(
+        top: false,
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -31,7 +32,6 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 24),
             ],
           ),
         ),

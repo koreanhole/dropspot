@@ -223,6 +223,7 @@ class _PublicParkingLotInfoActionButton extends StatelessWidget {
           label: "지도앱에서 보기",
           onPressed: () => showMaterialModalBottomSheet(
             context: context,
+            duration: Duration(milliseconds: 100),
             backgroundColor: backgroundColor,
             builder: (context) => OpenInMapsModalSheet(
               publicParkingInfo: publicParkingInfo,

@@ -87,6 +87,7 @@ class _DropspotAppState extends State<DropspotApp> {
     return MaterialApp(
       title: 'Dropspot',
       theme: ThemeData(
+        useMaterial3: false,
         primaryColor: primaryColor,
         brightness: Brightness.light,
         scaffoldBackgroundColor: backgroundColor,

@@ -69,6 +69,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
               showMaterialModalBottomSheet(
                 backgroundColor: backgroundColor,
                 context: context,
+                duration: Duration(milliseconds: 100),
                 expand: false,
                 builder: (context) => PublicParkingLotInfoModalSheet(
                   mapMarker: marker,

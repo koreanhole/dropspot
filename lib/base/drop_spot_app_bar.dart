@@ -13,11 +13,13 @@ class DropSpotAppBar extends AppBar {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
             ),
           ),
           iconTheme: IconThemeData(color: primaryColor),
           backgroundColor: backgroundColor,
           elevation: 0,
+          scrolledUnderElevation: 0,
         );
 }

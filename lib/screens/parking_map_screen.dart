@@ -57,7 +57,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
     final publicParkingMarkers = publicParkingInfos
         .map((info) {
           try {
-            final marker = NMarker(
+            final marker = NClusterableMarker(
               id: info.parkingLotId,
               position: NLatLng(
                 double.parse(info.latitude),
@@ -101,6 +101,13 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
                 locationButtonEnable: true,
                 logoClickEnable: false,
               ),
+              clusterOptions: NaverMapClusteringOptions(
+                enableZoomRange:
+                    NaverMapClusteringOptions.defaultClusteringZoomRange,
+                mergeStrategy: NClusterMergeStrategy(
+                  maxMergeableScreenDistance: 10,
+                ),
+              ),
               onMapReady: (controller) {
                 Logger().i("Map Ready");
                 _mapController = controller;
@@ -115,12 +122,12 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
                   Logger().e('Camera Bound or Markers are null');
                   return;
                 }
-                for (var marker in publicParkingMarkers) {
-                  final isVisible = cameraBound.containsPoint(marker.position);
-                  if (isVisible) {
-                    _mapController?.addOverlay(marker);
-                  }
-                }
+                final markersInCameraBound = publicParkingMarkers
+                    .where(
+                      (marker) => cameraBound.containsPoint(marker.position),
+                    )
+                    .toSet();
+                await _mapController?.addOverlayAll(markersInCameraBound);
               },
             )
           : Center(child: CircularProgressIndicator()),

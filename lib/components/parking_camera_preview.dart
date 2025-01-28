@@ -58,41 +58,43 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
       }
     }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _cameraController != null && _cameraController!.value.isInitialized
-            ? CameraAspectRatioPreset(
-                child: ClipRect(
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: _cameraController!.value.previewSize!.height,
-                        height: _cameraController!.value.previewSize!.width,
-                        child: CameraPreview(_cameraController!),
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _cameraController != null && _cameraController!.value.isInitialized
+              ? CameraAspectRatioPreset(
+                  child: ClipRect(
+                    child: OverflowBox(
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: _cameraController!.value.previewSize!.height,
+                          height: _cameraController!.value.previewSize!.width,
+                          child: CameraPreview(_cameraController!),
+                        ),
                       ),
                     ),
                   ),
+                )
+              : CameraAspectRatioPreset(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
-              )
-            : CameraAspectRatioPreset(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-        SizedBox(height: 16),
-        _CameraZoomSlider(cameraController: _cameraController),
-        SizedBox(height: 16),
-        FloatingActionButton(
-          onPressed: captureImage,
-          shape: CircleBorder(),
-          child: Icon(
-            Icons.camera_alt,
+          SizedBox(height: 16),
+          _CameraZoomSlider(cameraController: _cameraController),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: captureImage,
+            shape: CircleBorder(),
+            child: Icon(
+              Icons.camera_alt,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

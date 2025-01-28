@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:dropspot/base/data/bottom_tab_item.dart';
 import 'package:dropspot/base/theme/colors.dart';
-import 'package:dropspot/providers/parking_image_exif_provider.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
-import 'package:dropspot/providers/parking_level_text_provider.dart';
+import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:dropspot/screens/home_screen.dart';
 import 'package:dropspot/screens/more_screen.dart';
 import 'package:dropspot/screens/parking_map_screen.dart';
@@ -19,23 +18,13 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => ParkingImageProvider()),
           ChangeNotifierProxyProvider<ParkingImageProvider,
-              ParkingLevelTextProvider>(
-            create: (_) => ParkingLevelTextProvider(),
-            update: (_, parkingImageProvider, parkingLevelTextProvider) {
-              parkingLevelTextProvider ??= ParkingLevelTextProvider();
-              parkingLevelTextProvider
-                  .setRecognizedText(parkingImageProvider.imagePath);
-              return parkingLevelTextProvider;
-            },
-          ),
-          ChangeNotifierProxyProvider<ParkingImageProvider,
-              ParkingImageExifProvider>(
-            create: (_) => ParkingImageExifProvider(),
-            update: (_, parkingImageProvider, parkingImageDateTimeProvider) {
-              parkingImageDateTimeProvider ??= ParkingImageExifProvider();
-              parkingImageDateTimeProvider
-                  .setParkingImageExifData(parkingImageProvider.imagePath);
-              return parkingImageDateTimeProvider;
+              ParkingInfoProvider>(
+            create: (_) => ParkingInfoProvider(),
+            update: (_, parkingImageProvider, parkingInfoProvider) {
+              parkingInfoProvider ??= ParkingInfoProvider();
+              parkingInfoProvider
+                  .setParkingImageInfo(parkingImageProvider.imagePath);
+              return parkingInfoProvider;
             },
           ),
         ],

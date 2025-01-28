@@ -1,7 +1,9 @@
 import 'package:camera/camera.dart';
+import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
 import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +39,8 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
     );
 
     await _cameraController?.initialize();
+    await _cameraController?.setFlashMode(FlashMode.off);
+    await _cameraController?.setExposureMode(ExposureMode.auto);
     setState(() {});
   }
 
@@ -78,12 +82,88 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
                   child: CircularProgressIndicator(),
                 ),
               ),
-        SizedBox(height: 32),
+        SizedBox(height: 16),
+        _CameraZoomSlider(cameraController: _cameraController),
+        SizedBox(height: 16),
         FloatingActionButton(
           onPressed: captureImage,
           shape: CircleBorder(),
           child: Icon(
             Icons.camera_alt,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CameraZoomSlider extends StatefulWidget {
+  final CameraController? cameraController;
+
+  const _CameraZoomSlider({this.cameraController});
+
+  @override
+  State<_CameraZoomSlider> createState() => _CameraZoomSliderState();
+}
+
+class _CameraZoomSliderState extends State<_CameraZoomSlider> {
+  double minZoomLevel = 1.0;
+  double maxZoomLevel = 10.0;
+  double currentZoomLevel = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeCameraZoomLevel();
+  }
+
+  void initializeCameraZoomLevel() async {
+    double? _minZoomLevel = await widget.cameraController?.getMinZoomLevel();
+    double? _currentZoomLevel = _minZoomLevel;
+
+    setState(() {
+      minZoomLevel = _minZoomLevel ?? 1.0;
+      currentZoomLevel = _currentZoomLevel ?? 1.0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "-",
+          style: TextStyle(
+            fontSize: 24,
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.7,
+          child: Slider(
+            min: minZoomLevel,
+            max: maxZoomLevel,
+            value: currentZoomLevel,
+            activeColor: primaryColor,
+            inactiveColor: tertiaryColor,
+            onChanged: (value) async {
+              try {
+                await widget.cameraController?.setZoomLevel(value);
+                setState(() {
+                  currentZoomLevel = value;
+                });
+              } catch (exception) {
+                if (exception is CameraException) {
+                  Logger().e(exception);
+                }
+              }
+            },
+          ),
+        ),
+        Text(
+          "+",
+          style: TextStyle(
+            fontSize: 24,
           ),
         ),
       ],

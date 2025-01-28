@@ -56,18 +56,18 @@ class DropspotApp extends StatefulWidget {
 }
 
 class _DropspotAppState extends State<DropspotApp> {
-  int _selectedBottomTabIndex = 1;
+  int _selectedBottomTabIndex = 0;
 
   final List<BottomTabItem> _bottomTabItems = [
-    BottomTabItem(
-      label: '공영주차장',
-      icon: Icon(Icons.map),
-      screen: const ParkingMapScreen(),
-    ),
     BottomTabItem(
       label: '홈',
       icon: Icon(Icons.home),
       screen: const HomeScreen(),
+    ),
+    BottomTabItem(
+      label: '공영주차장',
+      icon: Icon(Icons.map),
+      screen: const ParkingMapScreen(),
     ),
     BottomTabItem(
       label: '더보기',

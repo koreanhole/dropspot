@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dropspot/base/data/bottom_tab_item.dart';
 import 'package:dropspot/base/theme/colors.dart';
-import 'package:dropspot/providers/parking_image_provider.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:dropspot/screens/home_screen.dart';
 import 'package:dropspot/screens/more_screen.dart';
@@ -16,17 +15,7 @@ void main() {
     () => runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => ParkingImageProvider()),
-          ChangeNotifierProxyProvider<ParkingImageProvider,
-              ParkingInfoProvider>(
-            create: (_) => ParkingInfoProvider(),
-            update: (_, parkingImageProvider, parkingInfoProvider) {
-              parkingInfoProvider ??= ParkingInfoProvider();
-              parkingInfoProvider
-                  .setParkingImageInfo(parkingImageProvider.imagePath);
-              return parkingInfoProvider;
-            },
-          ),
+          ChangeNotifierProvider(create: (_) => ParkingInfoProvider()),
         ],
         child: const DropspotApp(),
       ),

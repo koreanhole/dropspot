@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
-import 'package:dropspot/providers/parking_image_provider.dart';
+import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,8 +52,8 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
       final image = await _cameraController?.takePicture();
       if (image != null && context.mounted) {
         await context
-            .read<ParkingImageProvider>()
-            .saveImageToFiles(image: image);
+            .read<ParkingInfoProvider>()
+            .setParkingImageInfo(File(image.path));
       }
       if (context.mounted) {
         Navigator.pop(context);

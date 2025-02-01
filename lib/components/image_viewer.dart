@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
-import 'package:dropspot/providers/parking_image_provider.dart';
+import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,8 @@ class ImageViewer extends StatelessWidget {
     final TransformationController transformationController =
         TransformationController(Matrix4.identity());
 
-    final parkingImagePath = context.watch<ParkingImageProvider>().imagePath;
+    final parkingImagePath =
+        context.watch<ParkingInfoProvider>().parkingImagePath;
     return CameraAspectRatioPreset(
       child: InteractiveViewer(
         minScale: minImageScale,

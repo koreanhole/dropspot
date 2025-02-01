@@ -58,7 +58,7 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text("주차시간"),
+          Text("주차 시간"),
           Text(
             it,
             style: TextStyle(

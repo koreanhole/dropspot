@@ -53,6 +53,8 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
 
   Future<void> initializePublicParkingMarkers() async {
     final publicParkingInfos = await JsonUtil().getPublicParkingInfos();
+    final publicParkingMarkerIcon =
+        NOverlayImage.fromAssetImage("assets/map/parking_lot_marker.png");
 
     final publicParkingMarkers = publicParkingInfos
         .map((info) {
@@ -63,6 +65,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
                 double.parse(info.latitude),
                 double.parse(info.longitude),
               ),
+              icon: publicParkingMarkerIcon,
             );
             marker.setOnTapListener((marker) {
               Logger().d("setOnTapListener: ${info.toJson()}");

@@ -76,6 +76,7 @@ flutter:
     - assets/samples/sample.png
     - assets/public_parking_info.json
     - .env
+    - assets/map/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

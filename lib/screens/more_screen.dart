@@ -81,7 +81,7 @@ class _RecognizedTextToggleState extends State<_RecognizedTextToggle> {
               ),
               SizedBox(height: 2),
               Text(
-                "이미지에서 주차 위치를 자동으로 인삭합니다.",
+                "이미지에서 주차 위치를 자동으로 인식합니다.",
                 style: moreScreenSublabelTextStyle,
               )
             ],

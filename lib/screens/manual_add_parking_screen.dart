@@ -17,7 +17,7 @@ class ManualAddParkingScreen extends StatelessWidget {
     const manualParkingItems = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4];
 
     return Scaffold(
-      appBar: DropSpotAppBar(title: "수동 등록"),
+      appBar: DropSpotAppBar(title: "주차위치 추가"),
       body: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: defaultManualParkingItemPadding),

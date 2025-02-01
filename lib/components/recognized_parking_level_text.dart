@@ -18,7 +18,7 @@ class RecognizedParkingLevelText extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text("주차위치"),
+          Text("주차 위치"),
           Text(
             parkedLevel.convertToReadableText(),
             style: TextStyle(

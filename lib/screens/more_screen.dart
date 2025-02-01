@@ -76,7 +76,7 @@ class _RecognizedTextToggleState extends State<_RecognizedTextToggle> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "주차위치 자동인식",
+                "주차 위치 자동인식",
                 style: moreScreenLabelTextStyle,
               ),
               SizedBox(height: 2),

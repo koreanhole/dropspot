@@ -21,6 +21,12 @@ class ParkingInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setParkingManualInfo(ParkingInfo parkingInfo) {
+    Logger().d("setParkingManualInfo");
+    _parkingInfo = parkingInfo;
+    notifyListeners();
+  }
+
   Future<int?> _getParkingLevelFromImage(String imagePath) async {
     final basementParkingTextPattern =
         RegExp(r'b\s*(\d+)', caseSensitive: false);
@@ -39,7 +45,7 @@ class ParkingInfoProvider with ChangeNotifier {
         for (TextLine line in block.lines) {
           for (var match in basementParkingTextPattern.allMatches(line.text)) {
             Logger().i('Recognized text: ${line.text}');
-            return int.parse(match.group(1) ?? "");
+            return -1 * int.parse(match.group(1) ?? "");
           }
         }
       }

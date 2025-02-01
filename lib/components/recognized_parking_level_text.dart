@@ -1,3 +1,4 @@
+import 'package:dropspot/base/string_util.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class RecognizedParkingLevelText extends StatelessWidget {
         children: [
           Text("주차위치"),
           Text(
-            ("지하 $it층"),
+            parkedLevel.convertToReadableText(),
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,

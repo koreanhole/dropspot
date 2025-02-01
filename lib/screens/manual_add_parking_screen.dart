@@ -1,7 +1,11 @@
+import 'package:dropspot/base/data/parking_info.dart';
 import 'package:dropspot/base/drop_spot_app_bar.dart';
+import 'package:dropspot/base/string_util.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
+import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManualAddParkingScreen extends StatelessWidget {
   const ManualAddParkingScreen({super.key});
@@ -9,6 +13,8 @@ class ManualAddParkingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double defaultManualParkingItemPadding = 16;
+
+    const manualParkingItems = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4];
 
     return Scaffold(
       appBar: DropSpotAppBar(title: "수동 등록"),
@@ -22,17 +28,25 @@ class ManualAddParkingScreen extends StatelessWidget {
             crossAxisSpacing: defaultManualParkingItemPadding,
             mainAxisSpacing: defaultManualParkingItemPadding,
           ),
+          itemCount: manualParkingItems.length,
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: defaultBoxBorderRadius,
-                color: secondaryColor,
-              ),
+            return Material(
+              color: secondaryColor,
+              borderRadius: defaultBoxBorderRadius,
+              clipBehavior: Clip.antiAlias,
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  context.read<ParkingInfoProvider>().setParkingManualInfo(
+                        ParkingInfo(
+                          parkedLevel: manualParkingItems[index],
+                          parkedDateTime: DateTime.now(),
+                        ),
+                      );
+                  Navigator.of(context).pop();
+                },
                 child: Center(
                   child: Text(
-                    '지하 $index층',
+                    manualParkingItems[index].convertToReadableText(),
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,

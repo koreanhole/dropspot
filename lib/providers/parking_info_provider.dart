@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dropspot/base/data/parking_info.dart';
@@ -7,6 +8,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import 'package:intl/intl.dart';
 import 'package:logger/web.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const String imageFileName = 'parking_image.jpg';
 const String defaultImagePath = 'assets/samples/sample.png';
@@ -24,6 +26,7 @@ class ParkingInfoProvider with ChangeNotifier {
 
   Future<void> setParkingImageInfo(File image) async {
     Logger().d("setParkingImageInfo");
+    await _deleteParkingInfoFromPreferences();
     final File savedParkingImage = await _getParkingImage();
     final List<int> imageBytes = await image.readAsBytes();
     _image =
@@ -40,6 +43,7 @@ class ParkingInfoProvider with ChangeNotifier {
     _parkingInfo = parkingInfo;
     await _deleteAllParkingImage();
     _image = null;
+    await _saveParkingInfoToPreferences(parkingInfo);
     notifyListeners();
   }
 
@@ -48,7 +52,7 @@ class ParkingInfoProvider with ChangeNotifier {
     final List<FileSystemEntity> files = directory.listSync();
     for (int i = 0; i < files.length; i++) {
       if (files[i] is File && files[i].path.contains(imageFileName)) {
-        await files[i].delete(); // 파일 삭제
+        await files[i].delete();
       }
     }
   }
@@ -59,13 +63,12 @@ class ParkingInfoProvider with ChangeNotifier {
 
     final textRecognizer = TextRecognizer();
     try {
-      final file = image;
-      if (!file.existsSync()) {
+      if (!image.existsSync()) {
         Logger().e("파일이 존재하지 않습니다.");
         return Future.error("파일이 존재하지 않습니다.");
       }
       final RecognizedText recognizedText = await textRecognizer.processImage(
-        InputImage.fromFile(file),
+        InputImage.fromFile(image),
       );
       for (TextBlock block in recognizedText.blocks) {
         for (TextLine line in block.lines) {
@@ -96,6 +99,16 @@ class ParkingInfoProvider with ChangeNotifier {
   }
 
   Future<void> _initializeParkingInfo() async {
+    // 먼저 SharedPreferences에서 수동 등록한 parkingInfo를 불러옴
+    final savedManualInfo = await _loadParkingInfoFromPreferences();
+    if (savedManualInfo != null) {
+      _parkingInfo = savedManualInfo;
+      notifyListeners();
+      Logger().d('Loaded parkingInfo from SharedPreferences');
+      return;
+    }
+
+    // 저장된 수동 등록 정보가 없으면 이미지 파일에서 parkingInfo를 불러옴
     final Directory directory = await getApplicationDocumentsDirectory();
     final List<FileSystemEntity> files = directory.listSync()
       ..sort((a, b) {
@@ -129,5 +142,29 @@ class ParkingInfoProvider with ChangeNotifier {
     final File parkingImage =
         File('$path/$imageFileName${DateTime.now().microsecondsSinceEpoch}');
     return parkingImage;
+  }
+
+  // SharedPreferences에 ParkingInfo 삭제
+  Future<void> _deleteParkingInfoFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('parking_info');
+  }
+
+  // SharedPreferences에 ParkingInfo 저장
+  Future<void> _saveParkingInfoToPreferences(ParkingInfo parkingInfo) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = json.encode(parkingInfo.toJson());
+    await prefs.setString('parking_info', jsonString);
+  }
+
+  // SharedPreferences에서 ParkingInfo 불러오기
+  Future<ParkingInfo?> _loadParkingInfoFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('parking_info');
+    if (jsonString != null) {
+      final Map<String, dynamic> map = json.decode(jsonString);
+      return ParkingInfo.fromJson(map);
+    }
+    return null;
   }
 }

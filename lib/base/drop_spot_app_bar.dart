@@ -5,6 +5,7 @@ class DropSpotAppBar extends AppBar {
   DropSpotAppBar({
     super.key,
     required String title,
+    super.actions,
   }) : super(
           title: Align(
             alignment: Alignment.centerLeft,

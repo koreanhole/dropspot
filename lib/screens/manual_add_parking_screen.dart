@@ -30,7 +30,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
     }
   }
 
-  // 삭제 모드 해제: 일반 탭 시 해제할 수 있도록 합니다.
+  // 삭제 모드 해제: 일반 탭 시 혹은 삭제 후 해제할 수 있도록 합니다.
   void _exitDeleteMode() {
     if (_globalDeleteMode) {
       setState(() {
@@ -39,12 +39,64 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
     }
   }
 
+  // 삭제 확인 팝업을 띄워 실제로 삭제할지 결정하고,
+  // "예"를 선택하면 해당 아이템을 삭제한 후 삭제 모드를 해제합니다.
+  Future<void> _showDeleteConfirmationDialog(int index) async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("주차 위치를 삭제합니다."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("아니오"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("예"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      setState(() {
+        manualParkingItems.removeAt(index);
+      });
+      _exitDeleteMode();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const double defaultManualParkingItemPadding = 16;
 
     return Scaffold(
-      appBar: DropSpotAppBar(title: "주차 위치 추가"),
+      appBar: DropSpotAppBar(
+        title: "주차 위치 추가",
+        actions: [
+          // _globalDeleteMode가 활성화되었을 때만 추가 버튼을 표시합니다.
+          if (_globalDeleteMode)
+            IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () {},
+              icon: const Icon(Icons.add),
+            ),
+          IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () {
+              if (_globalDeleteMode) {
+                _exitDeleteMode();
+              } else {
+                _enterDeleteMode();
+              }
+            },
+            icon: const Icon(Icons.tune),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: defaultManualParkingItemPadding,
@@ -80,14 +132,12 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
                   Navigator.of(context).pop();
                 }
               },
+              // 삭제 아이콘 터치 시 확인 팝업을 띄워 삭제 여부 결정
               onDelete: () {
-                setState(() {
-                  manualParkingItems.removeAt(index);
-                });
+                _showDeleteConfirmationDialog(index);
               },
             );
           },
-          // 항목 드래그 앤 드롭으로 순서 변경 시 호출되는 콜백
           onReorder: (oldIndex, newIndex) {
             setState(() {
               final int movedItem = manualParkingItems.removeAt(oldIndex);
@@ -129,12 +179,12 @@ class _ParkingItemTileState extends State<ParkingItemTile>
   @override
   void initState() {
     super.initState();
-    // 애니메이션 컨트롤러를 125ms 주기로 설정합니다. (이전보다 2배 빠름)
+    // 애니메이션 컨트롤러를 200ms 주기로 설정합니다.
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    // -2도 ~ 2도 (약 -0.035 ~ 0.035 라디안) 범위로 회전하는 애니메이션을 생성합니다.
+    // -2도 ~ 2도 (약 -0.035 ~ 0.035 라디안) 범위의 회전 애니메이션을 생성합니다.
     _wiggleAnimation =
         Tween<double>(begin: -0.035, end: 0.035).animate(_controller);
     if (widget.isDeleteMode) {
@@ -165,7 +215,6 @@ class _ParkingItemTileState extends State<ParkingItemTile>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        // 삭제 모드일 때만 iOS 스타일의 wiggle 효과를 위해 회전 애니메이션 적용
         return Transform.rotate(
           angle: widget.isDeleteMode ? _wiggleAnimation.value : 0,
           child: child,
@@ -177,7 +226,7 @@ class _ParkingItemTileState extends State<ParkingItemTile>
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
-            /// 전체 타일 영역
+            // 전체 타일 영역
             InkWell(
               onTap: widget.onTap,
               onLongPress: widget.onLongPress,
@@ -187,13 +236,12 @@ class _ParkingItemTileState extends State<ParkingItemTile>
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
               ),
             ),
-
-            /// 삭제 아이콘(-)을 좌측 상단에 표시 (삭제 모드일 때)
+            // 삭제 모드일 때 좌측 상단에 삭제 아이콘(-) 표시
             if (widget.isDeleteMode)
               Positioned(
                 top: 4,

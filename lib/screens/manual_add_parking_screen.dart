@@ -383,7 +383,7 @@ class _ParkingItemTileState extends State<ParkingItemTile>
                     padding: const EdgeInsets.all(4),
                     child: const Icon(
                       Icons.remove,
-                      size: 20,
+                      size: 24,
                       color: Colors.white,
                     ),
                   ),

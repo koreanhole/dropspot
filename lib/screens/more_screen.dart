@@ -18,7 +18,7 @@ const moreScreenSublabelTextStyle = TextStyle(
 );
 
 const recognizedTextStateKey = "recognizedTextStateKey";
-const recognizedTextStateDefaultValue = true;
+const recognizedTextStateDefaultValue = false;
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});

@@ -12,7 +12,7 @@ class DropSpotAppBar extends AppBar {
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),

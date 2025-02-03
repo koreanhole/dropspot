@@ -6,7 +6,6 @@ import 'package:dropspot/components/info_card.dart';
 import 'package:dropspot/components/open_in_maps_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 final titleTextStyle = TextStyle(
   fontSize: 12,

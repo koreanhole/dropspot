@@ -1,13 +1,11 @@
 import 'package:dropspot/base/bottom_sheet.dart';
 import 'package:dropspot/base/json_util.dart';
 import 'package:dropspot/base/location_util.dart';
-import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/public_parking_lot_info_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:logger/logger.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 const defaultMapZoom = 16.0;
 const naverMapClientIdKey = 'NAVER_MAP_CLIENT_ID';

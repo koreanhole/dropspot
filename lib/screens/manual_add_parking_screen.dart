@@ -7,6 +7,8 @@ import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ManualAddParkingScreen extends StatefulWidget {
   const ManualAddParkingScreen({super.key});
@@ -16,10 +18,37 @@ class ManualAddParkingScreen extends StatefulWidget {
 }
 
 class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
-  // 초기 항목 리스트
+  // 초기 항목 리스트 (Shared Preferences에 저장된 값이 없으면 이 값을 사용)
   List<int> manualParkingItems = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4];
   // 글로벌 삭제 모드 플래그
   bool _globalDeleteMode = false;
+  final String _prefsKey = 'manualParkingItems';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadState();
+  }
+
+  // SharedPreferences에서 저장된 리스트를 불러옵니다.
+  Future<void> _loadState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? itemsJson = prefs.getString(_prefsKey);
+    if (itemsJson != null) {
+      List<dynamic> jsonList = json.decode(itemsJson);
+      List<int> loadedList = jsonList.map((e) => e as int).toList();
+      setState(() {
+        manualParkingItems = loadedList;
+      });
+    }
+  }
+
+  // 현재 manualParkingItems 상태를 SharedPreferences에 저장합니다.
+  Future<void> _saveState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonList = json.encode(manualParkingItems);
+    await prefs.setString(_prefsKey, jsonList);
+  }
 
   // 한 항목에서 길게 누르면 모든 항목이 삭제 모드로 전환됩니다.
   void _enterDeleteMode() {
@@ -40,12 +69,13 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
   }
 
   // 삭제 확인 팝업을 띄워 실제로 삭제할지 결정하고,
-  // "예"를 선택하면 해당 아이템을 삭제한 후 삭제 모드를 해제합니다.
+  // "예"를 선택하면 해당 아이템을 삭제한 후 삭제 모드를 해제하고 상태를 저장합니다.
   Future<void> _showDeleteConfirmationDialog(int index) async {
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("주차 위치를 삭제합니다."),
+        title: Text("삭제할까요?"),
+        content: Text(manualParkingItems[index].convertToReadableText()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -64,7 +94,18 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
         manualParkingItems.removeAt(index);
       });
       _exitDeleteMode();
+      _saveState();
     }
+  }
+
+  // 추가 버튼을 눌렀을 때 실행할 함수 (원하는 동작으로 변경 가능)
+  void _onAddButtonPressed() {
+    setState(() {
+      final newItem =
+          (manualParkingItems.isNotEmpty) ? manualParkingItems.last + 1 : 0;
+      manualParkingItems.add(newItem);
+    });
+    _saveState();
   }
 
   @override
@@ -80,7 +121,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
             IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onPressed: () {},
+              onPressed: _onAddButtonPressed,
               icon: const Icon(Icons.add),
             ),
           IconButton(
@@ -99,8 +140,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: defaultManualParkingItemPadding,
-        ),
+            horizontal: defaultManualParkingItemPadding),
         child: ReorderableGridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -111,31 +151,31 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
           itemCount: manualParkingItems.length,
           itemBuilder: (context, index) {
             final item = manualParkingItems[index];
-            return ParkingItemTile(
-              key: ValueKey(item), // 재정렬을 위해 반드시 필요!
-              item: item,
-              // 부모에서 관리하는 삭제 모드 상태를 전달합니다.
-              isDeleteMode: _globalDeleteMode,
-              onLongPress: _enterDeleteMode,
-              onTap: () {
-                // 삭제 모드 상태라면 삭제 모드를 해제합니다.
-                if (_globalDeleteMode) {
-                  _exitDeleteMode();
-                } else {
-                  // 일반 탭 시 주차 정보 설정 후 화면 종료
-                  context.read<ParkingInfoProvider>().setParkingManualInfo(
-                        ParkingInfo(
-                          parkedLevel: item,
-                          parkedDateTime: DateTime.now(),
-                        ),
-                      );
-                  Navigator.of(context).pop();
-                }
-              },
-              // 삭제 아이콘 터치 시 확인 팝업을 띄워 삭제 여부 결정
-              onDelete: () {
-                _showDeleteConfirmationDialog(index);
-              },
+            // ReorderableDragStartListener로 감싸서 드래그를 시작할 수 있도록 합니다.
+            return ReorderableDragStartListener(
+              key: ValueKey(item), // 각 항목에 고유한 key
+              index: index,
+              child: ParkingItemTile(
+                item: item,
+                isDeleteMode: _globalDeleteMode,
+                onLongPress: _enterDeleteMode,
+                onTap: () {
+                  if (_globalDeleteMode) {
+                    _exitDeleteMode();
+                  } else {
+                    context.read<ParkingInfoProvider>().setParkingManualInfo(
+                          ParkingInfo(
+                            parkedLevel: item,
+                            parkedDateTime: DateTime.now(),
+                          ),
+                        );
+                    Navigator.of(context).pop();
+                  }
+                },
+                onDelete: () {
+                  _showDeleteConfirmationDialog(index);
+                },
+              ),
             );
           },
           onReorder: (oldIndex, newIndex) {
@@ -143,6 +183,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
               final int movedItem = manualParkingItems.removeAt(oldIndex);
               manualParkingItems.insert(newIndex, movedItem);
             });
+            _saveState();
           },
         ),
       ),
@@ -179,12 +220,10 @@ class _ParkingItemTileState extends State<ParkingItemTile>
   @override
   void initState() {
     super.initState();
-    // 애니메이션 컨트롤러를 200ms 주기로 설정합니다.
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    // -2도 ~ 2도 (약 -0.035 ~ 0.035 라디안) 범위의 회전 애니메이션을 생성합니다.
     _wiggleAnimation =
         Tween<double>(begin: -0.035, end: 0.035).animate(_controller);
     if (widget.isDeleteMode) {
@@ -195,7 +234,6 @@ class _ParkingItemTileState extends State<ParkingItemTile>
   @override
   void didUpdateWidget(covariant ParkingItemTile oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 삭제 모드가 활성화되면 애니메이션 시작, 해제되면 정지 및 리셋
     if (widget.isDeleteMode && !oldWidget.isDeleteMode) {
       _controller.repeat(reverse: true);
     } else if (!widget.isDeleteMode && oldWidget.isDeleteMode) {
@@ -226,7 +264,6 @@ class _ParkingItemTileState extends State<ParkingItemTile>
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
-            // 전체 타일 영역
             InkWell(
               onTap: widget.onTap,
               onLongPress: widget.onLongPress,
@@ -241,7 +278,6 @@ class _ParkingItemTileState extends State<ParkingItemTile>
                 ),
               ),
             ),
-            // 삭제 모드일 때 좌측 상단에 삭제 아이콘(-) 표시
             if (widget.isDeleteMode)
               Positioned(
                 top: 4,

@@ -1,3 +1,4 @@
+import 'package:dropspot/base/bottom_sheet.dart';
 import 'package:dropspot/base/data/public_parking_info.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
@@ -221,11 +222,9 @@ class _PublicParkingLotInfoActionButton extends StatelessWidget {
         SizedBox(width: 12),
         _PublicParkingInfoActionButton(
           label: "지도앱에서 보기",
-          onPressed: () => showMaterialModalBottomSheet(
+          onPressed: () => showDropSpotBottomsheet(
             context: context,
-            duration: Duration(milliseconds: 100),
-            backgroundColor: backgroundColor,
-            builder: (context) => OpenInMapsModalSheet(
+            child: OpenInMapsModalSheet(
               publicParkingInfo: publicParkingInfo,
             ),
           ),

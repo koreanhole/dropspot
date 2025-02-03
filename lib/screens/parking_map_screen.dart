@@ -1,3 +1,4 @@
+import 'package:dropspot/base/bottom_sheet.dart';
 import 'package:dropspot/base/json_util.dart';
 import 'package:dropspot/base/location_util.dart';
 import 'package:dropspot/base/theme/colors.dart';
@@ -69,12 +70,9 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
             );
             marker.setOnTapListener((marker) {
               Logger().d("setOnTapListener: ${info.toJson()}");
-              showMaterialModalBottomSheet(
-                backgroundColor: backgroundColor,
+              showDropSpotBottomsheet(
                 context: context,
-                duration: Duration(milliseconds: 100),
-                expand: false,
-                builder: (context) => PublicParkingLotInfoModalSheet(
+                child: PublicParkingLotInfoModalSheet(
                   mapMarker: marker,
                   publicParkingInfo: info,
                 ),

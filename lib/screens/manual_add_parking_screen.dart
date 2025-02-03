@@ -38,14 +38,18 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
     if (itemsJson != null) {
       List<dynamic> jsonList = json.decode(itemsJson);
       List<int> loadedList = jsonList.map((e) => e as int).toList();
+      // 불러온 리스트를 오름차순 정렬 및 중복 제거 후 상태 업데이트
       setState(() {
-        manualParkingItems = loadedList;
+        manualParkingItems = loadedList.toSet().toList()..sort();
       });
     }
   }
 
-  // 현재 manualParkingItems 상태를 SharedPreferences에 저장합니다.
+  // manualParkingItems 리스트를 오름차순 정렬하고 중복을 제거한 후 SharedPreferences에 저장합니다.
   Future<void> _saveState() async {
+    setState(() {
+      manualParkingItems = manualParkingItems.toSet().toList()..sort();
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String jsonList = json.encode(manualParkingItems);
     await prefs.setString(_prefsKey, jsonList);
@@ -84,7 +88,10 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("예"),
+            child: const Text(
+              "삭제",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -102,10 +109,10 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
   void _onAddButtonPressed() {
     // 피커에 표시할 옵션들
     final List<String> levelOptions = ["지상", "지하"];
-    // 두번째 피커: 0부터 10까지의 정수 옵션
+    // 두번째 피커: 1부터 10까지의 정수 옵션
     final List<int> numberOptions = List.generate(10, (index) => index + 1);
     // 기본 선택값
-    int selectedNumber = 0;
+    int selectedNumber = numberOptions.first;
     int selectedLevelIndex = 0; // 0: 지상, 1: 지하
 
     showDialog(
@@ -114,7 +121,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              title: const Text("주차 위치 추가"),
+              title: const Text("주차 층 추가"),
               content: SizedBox(
                 height: 200,
                 child: Row(
@@ -135,11 +142,11 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
                             .toList(),
                       ),
                     ),
-                    // 두 번째 피커: 0 ~ 10 정수 선택 (숫자 뒤에 '층' 추가)
+                    // 두 번째 피커: 1 ~ 10 정수 선택 (숫자 뒤에 '층' 추가)
                     Expanded(
                       child: CupertinoPicker(
-                        scrollController: FixedExtentScrollController(
-                            initialItem: selectedNumber),
+                        scrollController:
+                            FixedExtentScrollController(initialItem: 0),
                         itemExtent: 32,
                         onSelectedItemChanged: (int index) {
                           setStateDialog(() {
@@ -172,9 +179,10 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
                       manualParkingItems.add(finalValue);
                     });
                     _saveState();
+                    _exitDeleteMode();
                     Navigator.pop(context);
                   },
-                  child: const Text("저장"),
+                  child: const Text("추가"),
                 ),
               ],
             );

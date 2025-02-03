@@ -5,6 +5,7 @@ import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,14 +98,90 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
     }
   }
 
-  // 추가 버튼을 눌렀을 때 실행할 함수 (원하는 동작으로 변경 가능)
+  // 추가 버튼을 눌렀을 때 AlertDialog를 띄워 피커 휠로 항목을 추가하도록 합니다.
   void _onAddButtonPressed() {
-    setState(() {
-      final newItem =
-          (manualParkingItems.isNotEmpty) ? manualParkingItems.last + 1 : 0;
-      manualParkingItems.add(newItem);
-    });
-    _saveState();
+    // 피커에 표시할 옵션들
+    final List<String> levelOptions = ["지상", "지하"];
+    // 두번째 피커: 0부터 10까지의 정수 옵션
+    final List<int> numberOptions = List.generate(10, (index) => index + 1);
+    // 기본 선택값
+    int selectedNumber = 0;
+    int selectedLevelIndex = 0; // 0: 지상, 1: 지하
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              title: const Text("주차 위치 추가"),
+              content: SizedBox(
+                height: 200,
+                child: Row(
+                  children: [
+                    // 첫 번째 피커: 지상, 지하 선택
+                    Expanded(
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                            initialItem: selectedLevelIndex),
+                        itemExtent: 32,
+                        onSelectedItemChanged: (int index) {
+                          setStateDialog(() {
+                            selectedLevelIndex = index;
+                          });
+                        },
+                        children: levelOptions
+                            .map((option) => Center(child: Text(option)))
+                            .toList(),
+                      ),
+                    ),
+                    // 두 번째 피커: 0 ~ 10 정수 선택 (숫자 뒤에 '층' 추가)
+                    Expanded(
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                            initialItem: selectedNumber),
+                        itemExtent: 32,
+                        onSelectedItemChanged: (int index) {
+                          setStateDialog(() {
+                            selectedNumber = numberOptions[index];
+                          });
+                        },
+                        children: numberOptions
+                            .map((number) => Center(child: Text('$number층')))
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // 취소
+                  },
+                  child: const Text("취소"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // 첫번째 피커에 따른 최종 값 계산:
+                    // 지상인 경우 selectedNumber를, 지하인 경우 -selectedNumber를 저장합니다.
+                    int finalValue = (selectedLevelIndex == 0)
+                        ? selectedNumber
+                        : -selectedNumber;
+                    setState(() {
+                      manualParkingItems.add(finalValue);
+                    });
+                    _saveState();
+                    Navigator.pop(context);
+                  },
+                  child: const Text("저장"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override

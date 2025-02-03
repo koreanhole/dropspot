@@ -93,7 +93,6 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
       setState(() {
         manualParkingItems.removeAt(index);
       });
-      _exitDeleteMode();
       _saveState();
     }
   }
@@ -124,18 +123,20 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
               onPressed: _onAddButtonPressed,
               icon: const Icon(Icons.add),
             ),
-          IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () {
-              if (_globalDeleteMode) {
-                _exitDeleteMode();
-              } else {
-                _enterDeleteMode();
-              }
-            },
-            icon: const Icon(Icons.tune),
-          ),
+          if (_globalDeleteMode)
+            IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () => _exitDeleteMode(),
+              icon: const Icon(Icons.close),
+            ),
+          if (!_globalDeleteMode)
+            IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () => _enterDeleteMode(),
+              icon: const Icon(Icons.tune),
+            ),
         ],
       ),
       body: Padding(

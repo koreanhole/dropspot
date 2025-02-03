@@ -224,53 +224,58 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
             ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: defaultManualParkingItemPadding),
-        child: ReorderableGridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1,
-            crossAxisSpacing: defaultManualParkingItemPadding,
-            mainAxisSpacing: defaultManualParkingItemPadding,
+      // GridView를 감싸서 빈 곳을 탭하면 삭제 모드 종료 처리
+      body: GestureDetector(
+        onTap: _exitDeleteMode,
+        behavior: HitTestBehavior.translucent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: defaultManualParkingItemPadding),
+          child: ReorderableGridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1,
+              crossAxisSpacing: defaultManualParkingItemPadding,
+              mainAxisSpacing: defaultManualParkingItemPadding,
+            ),
+            itemCount: manualParkingItems.length,
+            itemBuilder: (context, index) {
+              final item = manualParkingItems[index];
+              // ReorderableDragStartListener로 감싸서 드래그를 시작할 수 있도록 합니다.
+              return ReorderableDragStartListener(
+                key: ValueKey(item), // 각 항목에 고유한 key
+                index: index,
+                child: ParkingItemTile(
+                  item: item,
+                  isDeleteMode: _globalDeleteMode,
+                  onLongPress: _enterDeleteMode,
+                  onTap: () {
+                    if (_globalDeleteMode) {
+                      _exitDeleteMode();
+                    } else {
+                      context.read<ParkingInfoProvider>().setParkingManualInfo(
+                            ParkingInfo(
+                              parkedLevel: item,
+                              parkedDateTime: DateTime.now(),
+                            ),
+                          );
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  onDelete: () {
+                    _showDeleteConfirmationDialog(index);
+                  },
+                ),
+              );
+            },
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                final int movedItem = manualParkingItems.removeAt(oldIndex);
+                manualParkingItems.insert(newIndex, movedItem);
+              });
+              _saveState();
+            },
           ),
-          itemCount: manualParkingItems.length,
-          itemBuilder: (context, index) {
-            final item = manualParkingItems[index];
-            // ReorderableDragStartListener로 감싸서 드래그를 시작할 수 있도록 합니다.
-            return ReorderableDragStartListener(
-              key: ValueKey(item), // 각 항목에 고유한 key
-              index: index,
-              child: ParkingItemTile(
-                item: item,
-                isDeleteMode: _globalDeleteMode,
-                onLongPress: _enterDeleteMode,
-                onTap: () {
-                  if (_globalDeleteMode) {
-                    _exitDeleteMode();
-                  } else {
-                    context.read<ParkingInfoProvider>().setParkingManualInfo(
-                          ParkingInfo(
-                            parkedLevel: item,
-                            parkedDateTime: DateTime.now(),
-                          ),
-                        );
-                    Navigator.of(context).pop();
-                  }
-                },
-                onDelete: () {
-                  _showDeleteConfirmationDialog(index);
-                },
-              ),
-            );
-          },
-          onReorder: (oldIndex, newIndex) {
-            setState(() {
-              final int movedItem = manualParkingItems.removeAt(oldIndex);
-              manualParkingItems.insert(newIndex, movedItem);
-            });
-            _saveState();
-          },
         ),
       ),
     );

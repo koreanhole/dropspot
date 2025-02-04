@@ -1,12 +1,8 @@
-import 'package:dropspot/base/data/parking_info.dart';
-import 'package:dropspot/base/string_util.dart';
 import 'package:flutter/material.dart';
 
-class RecognizedParkingLevelText extends StatelessWidget {
-  final ParkingInfo parkingInfo;
-  const RecognizedParkingLevelText({
+class DummyRecognizedParkingLevelText extends StatelessWidget {
+  const DummyRecognizedParkingLevelText({
     super.key,
-    required this.parkingInfo,
   });
 
   @override
@@ -18,7 +14,7 @@ class RecognizedParkingLevelText extends StatelessWidget {
       children: [
         Text("주차 위치"),
         Text(
-          parkingInfo.parkedLevel.convertToReadableText(),
+          "알 수 없음",
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,

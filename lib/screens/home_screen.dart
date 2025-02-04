@@ -2,6 +2,7 @@
 
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/theme/colors.dart';
+import 'package:dropspot/components/dummy_recognized_parking_level_text.dart';
 import 'package:dropspot/components/image_datetime_text.dart';
 import 'package:dropspot/components/image_viewer.dart';
 import 'package:dropspot/components/info_card.dart';
@@ -51,11 +52,21 @@ class HomeScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           RecognizedParkingLevelText(parkingInfo: it),
+                          SizedBox(height: 12),
                           ImageDateTimeText(parkingInfo: it),
                         ],
                       ),
                     ),
-                    orElse: () => SizedBox.shrink(),
+                    orElse: () => InfoCard(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          DummyRecognizedParkingLevelText(),
+                        ],
+                      ),
+                    ),
                   ),
             ],
           ),

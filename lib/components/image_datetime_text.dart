@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:dropspot/base/data/parking_info.dart';
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/time_util.dart';
-import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ImageDateTimeText extends StatefulWidget {
   final ParkingInfo parkingInfo;

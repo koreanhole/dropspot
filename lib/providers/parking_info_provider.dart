@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String imageFileName = 'parking_image.jpg';
-const String defaultImagePath = 'assets/samples/sample.png';
+const String defaultImagePath = 'assets/images/default_parking_image.png';
 
 class ParkingInfoProvider with ChangeNotifier {
   ParkingInfo? _parkingInfo;

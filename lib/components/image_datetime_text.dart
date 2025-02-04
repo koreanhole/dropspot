@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dropspot/base/data/parking_info.dart';
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/time_util.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
@@ -7,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ImageDateTimeText extends StatefulWidget {
-  const ImageDateTimeText({super.key});
+  final ParkingInfo parkingInfo;
+  const ImageDateTimeText({
+    super.key,
+    required this.parkingInfo,
+  });
 
   @override
   State<ImageDateTimeText> createState() => _ImageDateTimeTextState();
@@ -31,9 +36,11 @@ class _ImageDateTimeTextState extends State<ImageDateTimeText> {
   }
 
   void _updateParkingElapsedTime() {
-    final parkingImageDateTime =
-        context.read<ParkingInfoProvider>().parkingInfo?.parkedDateTime;
+    final parkingImageDateTime = widget.parkingInfo.parkedDateTime;
     if (parkingImageDateTime == null) {
+      setState(() {
+        _parkingElapsedTime = null;
+      });
       return;
     }
     setState(() {

@@ -47,6 +47,15 @@ class ParkingInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteParkingInfo() async {
+    Logger().d("deleteParkingInfo");
+    await _deleteParkingInfoFromPreferences();
+    await _deleteAllParkingImage();
+    _parkingInfo = null;
+    _image = null;
+    notifyListeners();
+  }
+
   Future<void> _deleteAllParkingImage() async {
     final Directory directory = await getApplicationDocumentsDirectory();
     final List<FileSystemEntity> files = directory.listSync();

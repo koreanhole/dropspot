@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/web.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 const String imageFileName = 'parking_image.jpg';
 const String defaultImagePath = 'assets/images/default_parking_image.png';
@@ -42,7 +43,8 @@ class ParkingInfoProvider with ChangeNotifier {
     Logger().d("setParkingManualInfo");
     _parkingInfo = parkingInfo;
     await _deleteAllParkingImage();
-    _image = null;
+    print(parkingInfo.parkedLevel);
+    _image = await getAssetFile("assets/images/${parkingInfo.parkedLevel}.png");
     await _saveParkingInfoToPreferences(parkingInfo);
     notifyListeners();
   }
@@ -175,5 +177,22 @@ class ParkingInfoProvider with ChangeNotifier {
       return ParkingInfo.fromJson(map);
     }
     return null;
+  }
+
+  Future<File> getAssetFile(String assetPath,
+      {String fileName = 'temp_file'}) async {
+    // asset 데이터를 ByteData로 읽어옵니다.
+    final byteData = await rootBundle.load(assetPath);
+
+    // 임시 디렉토리를 가져옵니다.
+    final tempDir = await getTemporaryDirectory();
+
+    // 저장할 파일 경로를 생성합니다. (확장자를 asset 파일에 맞게 변경 필요)
+    final file = File('${tempDir.path}/$fileName');
+
+    // ByteData를 Uint8List로 변환하여 파일에 기록합니다.
+    await file.writeAsBytes(byteData.buffer.asUint8List());
+
+    return file;
   }
 }

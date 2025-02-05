@@ -117,6 +117,7 @@ class ParkingInfoProvider with ChangeNotifier {
     final savedManualInfo = await _loadParkingInfoFromPreferences();
     if (savedManualInfo != null) {
       _parkingInfo = savedManualInfo;
+      await setParkingManualInfo(savedManualInfo);
       notifyListeners();
       Logger().d('Loaded parkingInfo from SharedPreferences');
       return;

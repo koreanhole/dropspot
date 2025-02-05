@@ -41,10 +41,13 @@ class ParkingInfoProvider with ChangeNotifier {
 
   Future<void> setParkingManualInfo(ParkingInfo parkingInfo) async {
     Logger().d("setParkingManualInfo");
+    final File savedParkingImage = await _getImageFileFromAssets(
+        "assets/images/${parkingInfo.parkedLevel}.png");
+    final List<int> imageBytes =
+        await File(savedParkingImage.path).readAsBytes();
+    _image =
+        await savedParkingImage.writeAsBytes(imageBytes, mode: FileMode.write);
     _parkingInfo = parkingInfo;
-    await _deleteAllParkingImage();
-    print(parkingInfo.parkedLevel);
-    _image = await getAssetFile("assets/images/${parkingInfo.parkedLevel}.png");
     await _saveParkingInfoToPreferences(parkingInfo);
     notifyListeners();
   }
@@ -179,19 +182,22 @@ class ParkingInfoProvider with ChangeNotifier {
     return null;
   }
 
-  Future<File> getAssetFile(String assetPath,
-      {String fileName = 'temp_file'}) async {
-    // asset 데이터를 ByteData로 읽어옵니다.
+  Future<File> _getImageFileFromAssets(String assetPath,
+      {String? fileName}) async {
+    // asset의 데이터를 ByteData 형태로 읽어옵니다.
     final byteData = await rootBundle.load(assetPath);
 
     // 임시 디렉토리를 가져옵니다.
     final tempDir = await getTemporaryDirectory();
 
-    // 저장할 파일 경로를 생성합니다. (확장자를 asset 파일에 맞게 변경 필요)
-    final file = File('${tempDir.path}/$fileName');
+    // fileName이 제공되지 않으면 기본 파일명 지정
+    final name = fileName ?? assetPath.split('/').last;
 
-    // ByteData를 Uint8List로 변환하여 파일에 기록합니다.
-    await file.writeAsBytes(byteData.buffer.asUint8List());
+    // 임시 파일의 경로 생성
+    final file = File('${tempDir.path}/$name');
+
+    // ByteData를 Uint8List로 변환하여 파일에 기록
+    await file.writeAsBytes(byteData.buffer.asUint8List(), flush: true);
 
     return file;
   }

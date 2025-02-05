@@ -10,11 +10,9 @@ import 'package:dropspot/components/recognized_parking_level_text.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:dropspot/screens/camera_screen.dart';
 import 'package:dropspot/screens/manual_add_parking_screen.dart';
-import 'package:dropspot/screens/more_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 const HomeScreenLeftSpacer = SizedBox(width: 16);
 
@@ -35,7 +33,8 @@ class HomeScreen extends StatelessWidget {
         elevation: 3,
         spacing: 6,
         children: [
-          _AddParkingSpotButton(context: context),
+          _AddParkingImageSpotButton(context: context),
+          _AddParkingManualSpotButton(context: context),
           _DeleteParkingSpotButton(context: context),
         ],
       ),
@@ -76,15 +75,10 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _AddParkingSpotButton extends SpeedDialChild {
-  _AddParkingSpotButton({required BuildContext context})
+class _AddParkingManualSpotButton extends SpeedDialChild {
+  _AddParkingManualSpotButton({required BuildContext context})
       : super(
           onTap: () async {
-            final sharedPreferences = await SharedPreferences.getInstance();
-            final isRecognizedTextEnalbed =
-                sharedPreferences.getBool(recognizedTextStateKey) ??
-                    recognizedTextStateDefaultValue;
-
             if (context.mounted == false) {
               return;
             }
@@ -92,13 +86,29 @@ class _AddParkingSpotButton extends SpeedDialChild {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => isRecognizedTextEnalbed == true
-                    ? CameraScreen()
-                    : ManualAddParkingScreen(),
+                builder: (context) => ManualAddParkingScreen(),
               ),
             );
           },
-          child: Icon(Icons.add),
+          child: Icon(Icons.person_add),
+          shape: CircleBorder(),
+        );
+}
+
+class _AddParkingImageSpotButton extends SpeedDialChild {
+  _AddParkingImageSpotButton({required BuildContext context})
+      : super(
+          onTap: () async {
+            if (context.mounted == false) {
+              return;
+            }
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CameraScreen()),
+            );
+          },
+          child: Icon(Icons.camera_alt),
           shape: CircleBorder(),
         );
 }

@@ -9,7 +9,9 @@ class CameraScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DropSpotAppBar(title: ""),
+      appBar: DropSpotAppBar(
+        title: "",
+      ),
       backgroundColor: backgroundColor,
       body: ParkingCameraPreview(),
     );

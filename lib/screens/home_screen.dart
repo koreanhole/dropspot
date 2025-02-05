@@ -108,7 +108,7 @@ class _AddParkingImageSpotButton extends SpeedDialChild {
               MaterialPageRoute(builder: (context) => CameraScreen()),
             );
           },
-          child: Icon(Icons.camera_alt),
+          child: Icon(Icons.add_a_photo),
           shape: CircleBorder(),
         );
 }

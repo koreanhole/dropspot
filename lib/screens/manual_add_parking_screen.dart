@@ -198,7 +198,7 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
 
     return Scaffold(
       appBar: DropSpotAppBar(
-        title: "주차 위치 추가",
+        title: "",
         actions: [
           // _globalDeleteMode가 활성화되었을 때만 추가 버튼을 표시합니다.
           if (_globalDeleteMode)

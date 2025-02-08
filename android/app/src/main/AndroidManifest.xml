@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  android:foregroundServiceType="location" />
     <application
-        android:label="dropspot"
+        android:label="주차의 도수"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

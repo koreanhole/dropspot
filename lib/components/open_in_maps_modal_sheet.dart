@@ -56,6 +56,7 @@ class _OpenInMapsInfoCards extends StatelessWidget {
         _OpenInMapsLabel(
           publicParkingInfo: publicParkingInfo,
           labelText: "카카오맵에서 열기",
+          iconPath: "assets/icons/kakaomap_icon.png",
           onClick: () async {
             final url =
                 "kakaomap://look?p=${publicParkingInfo.latitude},${publicParkingInfo.longitude}";
@@ -68,6 +69,7 @@ class _OpenInMapsInfoCards extends StatelessWidget {
         _OpenInMapsLabel(
           publicParkingInfo: publicParkingInfo,
           labelText: "네이버지도에서 열기",
+          iconPath: "assets/icons/navermap_icon.png",
           onClick: () async {
             final url =
                 "nmap://place?name=${publicParkingInfo.parkingLotName}&lat=${publicParkingInfo.latitude}&lng=${publicParkingInfo.longitude}";
@@ -80,6 +82,7 @@ class _OpenInMapsInfoCards extends StatelessWidget {
         _OpenInMapsLabel(
           publicParkingInfo: publicParkingInfo,
           labelText: "티맵에서 열기",
+          iconPath: "assets/icons/tmap_icon.png",
           onClick: () async {
             final url =
                 "tmap://search?name=${publicParkingInfo.parkingLotName}&x=${publicParkingInfo.longitude}&y=${publicParkingInfo.latitude}";
@@ -96,11 +99,13 @@ class _OpenInMapsInfoCards extends StatelessWidget {
 class _OpenInMapsLabel extends StatelessWidget {
   final PublicParkingInfo publicParkingInfo;
   final String labelText;
+  final String iconPath;
   final VoidCallback onClick;
 
   const _OpenInMapsLabel(
       {required this.publicParkingInfo,
       required this.labelText,
+      required this.iconPath,
       required this.onClick});
 
   @override
@@ -111,12 +116,27 @@ class _OpenInMapsLabel extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              labelText,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    borderRadius: defaultBoxBorderRadius / 2,
+                    image: DecorationImage(
+                      image: AssetImage(iconPath),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12),
+                Text(
+                  labelText,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
             Icon(Icons.open_in_new_outlined),
           ],

@@ -90,7 +90,7 @@ class _AddParkingManualSpotButton extends SpeedDialChild {
               ),
             );
           },
-          child: Icon(Icons.person_add),
+          child: Icon(Icons.library_add),
           shape: CircleBorder(),
         );
 }

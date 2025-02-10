@@ -64,6 +64,7 @@ class _DropspotAppState extends State<DropspotApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dropspot',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: false,
         primaryColor: primaryColor,

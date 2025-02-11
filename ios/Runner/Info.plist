@@ -37,7 +37,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>주차 위치를 확인하기 위해 카메라를 사용합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>현재 위치를 가져오기 위해 위치 서비스가 필요합니다.</string>
+	<string>내 위치 주변의 공영주차장을 확인하기 위해 위치 서비스가 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>주차 위치를 확인하기 위해 사진을 사용합니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

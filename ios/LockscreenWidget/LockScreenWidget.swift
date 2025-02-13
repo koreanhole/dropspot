@@ -25,7 +25,7 @@ struct Provider: TimelineProvider {
         let currentDate = Date()
         // 예시: 단일 엔트리, 업데이트 정책은 필요에 따라 설정 (여기선 갱신 안 함)
         let entry = LockScreenEntry(date: currentDate)
-        let timeline = Timeline(entries: [entry], policy: .atEnd)
+        let timeline = Timeline(entries: [entry], policy: .never)
         completion(timeline)
     }
 }
@@ -35,10 +35,22 @@ struct LockScreenWidgetEntryView: View {
     var entry: LockScreenEntry
 
     var body: some View {
-        // 예시: 현재 시간을 텍스트로 표시
-        Text(entry.date, style: .time)
-            .font(.headline)
-            .padding()
+        Image("lockscreen_widget_app_icon")
+            .resizable()
+            .scaledToFit()
+            .frame(maxWidth: 80, maxHeight: 80)
+            .clipped()
+    }
+}
+
+extension View {
+    func widgetBackground() -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return containerBackground(for: .widget) {
+            }
+        } else {
+            return background()
+        }
     }
 }
 
@@ -50,9 +62,8 @@ struct LockScreenWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             LockScreenWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("잠금화면 위젯")
-        .description("iOS 잠금화면에 현재 시간을 표시합니다.")
-        // iOS 16 잠금화면 위젯은 아래 세 가지 패밀리 사용 가능 (.accessoryCircular, .accessoryRectangular, .accessoryInline)
-        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
+        .configurationDisplayName("주차 위치 확인")
+        .description("현재 주차된 차량의 위치를 확인합니다.")
+        .supportedFamilies([.accessoryCircular])
     }
 }

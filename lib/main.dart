@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:dropspot/base/data/bottom_tab_item.dart';
+import 'package:app_links/app_links.dart';
+import 'package:dropspot/base/drop_spot_router.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
-import 'package:dropspot/screens/home_screen.dart';
-import 'package:dropspot/screens/more_screen.dart';
-import 'package:dropspot/screens/parking_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
@@ -34,35 +32,38 @@ class DropspotApp extends StatefulWidget {
 }
 
 class _DropspotAppState extends State<DropspotApp> {
-  int _selectedBottomTabIndex = 0;
+  StreamSubscription<Uri>? _linkSubscription;
 
-  final List<BottomTabItem> _bottomTabItems = [
-    BottomTabItem(
-      label: '홈',
-      icon: Icon(Icons.home),
-      screen: const HomeScreen(),
-    ),
-    BottomTabItem(
-      label: '공영주차장',
-      icon: Icon(Icons.map),
-      screen: const ParkingMapScreen(),
-    ),
-    BottomTabItem(
-      label: '더보기',
-      icon: Icon(Icons.more_horiz),
-      screen: const MoreScreen(),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    initializeApplink();
+  }
 
-  void _onBottomTabItemTapped(int index) {
-    setState(() {
-      _selectedBottomTabIndex = index;
+  @override
+  void dispose() {
+    terminateApplink();
+    super.dispose();
+  }
+
+  Future<void> initializeApplink() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _linkSubscription = AppLinks().uriLinkStream.listen(
+        (uri) {
+          Logger().d(uri);
+          DropSpotRouter.routes.go('/${uri.host}');
+        },
+      );
     });
+  }
+
+  void terminateApplink() {
+    _linkSubscription?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Dropspot',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -110,21 +111,7 @@ class _DropspotAppState extends State<DropspotApp> {
           ),
         ),
       ),
-      home: Scaffold(
-        body: _bottomTabItems[_selectedBottomTabIndex].screen,
-        bottomNavigationBar: BottomNavigationBar(
-          items: _bottomTabItems
-              .map(
-                (item) => BottomNavigationBarItem(
-                  icon: item.icon,
-                  label: item.label,
-                ),
-              )
-              .toList(),
-          currentIndex: _selectedBottomTabIndex,
-          onTap: _onBottomTabItemTapped,
-        ),
-      ),
+      routerConfig: DropSpotRouter.routes,
     );
   }
 }

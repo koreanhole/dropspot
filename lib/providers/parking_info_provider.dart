@@ -5,6 +5,7 @@ import 'package:dropspot/base/data/parking_info.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/web.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,6 +37,7 @@ class ParkingInfoProvider with ChangeNotifier {
       parkedLevel: await _getParkingLevelFromImage(image),
       parkedDateTime: await _getParkingImageDateTimeFromImage(image),
     );
+    updateWidgetParkedLevel(_parkingInfo?.parkedLevel);
     notifyListeners();
   }
 
@@ -49,6 +51,7 @@ class ParkingInfoProvider with ChangeNotifier {
         await savedParkingImage.writeAsBytes(imageBytes, mode: FileMode.write);
     _parkingInfo = parkingInfo;
     await _saveParkingInfoToPreferences(parkingInfo);
+    updateWidgetParkedLevel(_parkingInfo?.parkedLevel);
     notifyListeners();
   }
 
@@ -58,6 +61,7 @@ class ParkingInfoProvider with ChangeNotifier {
     await _deleteAllParkingImage();
     _parkingInfo = null;
     _image = null;
+    updateWidgetParkedLevel(-999);
     notifyListeners();
   }
 
@@ -201,5 +205,17 @@ class ParkingInfoProvider with ChangeNotifier {
     await file.writeAsBytes(byteData.buffer.asUint8List(), flush: true);
 
     return file;
+  }
+
+  Future<void> updateWidgetParkedLevel(int? parkedLevel) async {
+    if (parkedLevel == null) {
+      Logger().i("parkedLevel is null");
+      return;
+    }
+    Logger().i("updateWidget parked level: $parkedLevel");
+    await HomeWidget.setAppGroupId(
+        "group.com.koreanhole.pluto.dropspot.widget");
+    await HomeWidget.saveWidgetData<int>("parkedLevel", parkedLevel);
+    await HomeWidget.updateWidget(iOSName: "LockScreenWidget");
   }
 }

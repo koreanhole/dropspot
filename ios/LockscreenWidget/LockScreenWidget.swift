@@ -4,6 +4,7 @@ import SwiftUI
 // 1. TimelineEntry 정의: 위젯에 표시할 데이터를 담은 구조체
 struct LockScreenEntry: TimelineEntry {
     let date: Date
+    let parkedLevel: Int
     // 추가 데이터(예: 텍스트, 이미지 등)를 필요에 따라 선언
 }
 
@@ -11,31 +12,39 @@ struct LockScreenEntry: TimelineEntry {
 struct Provider: TimelineProvider {
     // 플레이스홀더(미리보기 등에서 사용)
     func placeholder(in context: Context) -> LockScreenEntry {
-        LockScreenEntry(date: Date())
+        LockScreenEntry(date: Date(), parkedLevel: 1)
     }
     
     // 스냅샷: 위젯 갤러리 등 빠른 미리보기를 위해 사용
     func getSnapshot(in context: Context, completion: @escaping (LockScreenEntry) -> Void) {
-        let entry = LockScreenEntry(date: Date())
-        completion(entry)
+        let prefs = UserDefaults(suiteName: "group.com.koreanhole.pluto.dropspot.widget")
+        let parkedLevelFromPreference = prefs?.integer(forKey: "parkedLevel")
+        if (parkedLevelFromPreference != nil) {
+            let entry = LockScreenEntry(date: Date(), parkedLevel: parkedLevelFromPreference ?? -999)
+            completion(entry)
+        } else {
+            let entry = LockScreenEntry(date: Date(), parkedLevel: -999)
+            completion(entry)
+        }
+
     }
     
     // 실제 타임라인 구성: 일정 시간마다 업데이트할 데이터를 제공
     func getTimeline(in context: Context, completion: @escaping (Timeline<LockScreenEntry>) -> Void) {
-        let currentDate = Date()
-        // 예시: 단일 엔트리, 업데이트 정책은 필요에 따라 설정 (여기선 갱신 안 함)
-        let entry = LockScreenEntry(date: currentDate)
-        let timeline = Timeline(entries: [entry], policy: .never)
-        completion(timeline)
+        getSnapshot(in: context) { (entry) in
+                    let timeline = Timeline(entries: [entry], policy: .atEnd)
+                    completion(timeline)
+                }
     }
 }
 
 // 3. 위젯 뷰 작성: 실제 위젯 UI를 SwiftUI로 구현
 struct LockScreenWidgetEntryView: View {
-    var entry: LockScreenEntry
+    var entry: Provider.Entry
 
     var body: some View {
-        Image("lockscreen_widget_app_icon")
+        entry.parkedLevel.description
+            .appropriateImage()
             .resizable()
             .scaledToFit()
             .frame(maxWidth: 80, maxHeight: 80)
@@ -52,6 +61,16 @@ extension View {
             }
         } else {
             return background()
+        }
+    }
+}
+
+extension String {
+    func appropriateImage() -> Image {
+        if (self == "-999") {
+            Image("lockscreen_widget_app_icon")
+        } else {
+            Image(self)
         }
     }
 }

@@ -8,7 +8,7 @@ Future<T?> showDropSpotBottomsheet<T>({
 }) async {
   return showMaterialModalBottomSheet(
       context: context,
-      duration: Duration(milliseconds: 100),
+      useRootNavigator: true,
       backgroundColor: backgroundColor,
       expand: false,
       builder: (context) => child);

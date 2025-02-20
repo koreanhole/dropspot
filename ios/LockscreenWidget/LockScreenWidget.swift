@@ -40,6 +40,7 @@ struct LockScreenWidgetEntryView: View {
             .scaledToFit()
             .frame(maxWidth: 80, maxHeight: 80)
             .clipped()
+            .widgetURL(URL(string: "dropspot://home_screen"))
             .widgetBackground()
     }
 }

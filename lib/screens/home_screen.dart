@@ -9,8 +9,6 @@ import 'package:dropspot/components/image_viewer.dart';
 import 'package:dropspot/components/info_card.dart';
 import 'package:dropspot/components/recognized_parking_level_text.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
-import 'package:dropspot/screens/camera_screen.dart';
-import 'package:dropspot/screens/manual_add_parking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';

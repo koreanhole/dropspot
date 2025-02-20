@@ -59,9 +59,9 @@ class DropSpotRouter {
               .map(
                 (element) => GoRoute(
                   path: element.item.path,
-                  builder: (BuildContext context, GoRouterState state) {
-                    return element.item.screen;
-                  },
+                  pageBuilder: (context, state) => MaterialPage(
+                    child: element.item.screen,
+                  ),
                 ),
               )
               .toList())

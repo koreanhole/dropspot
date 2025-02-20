@@ -26,6 +26,15 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool _shouldShowBottomTab() {
+      final String location = GoRouterState.of(context).uri.toString();
+      return [
+        DropSpotRouteItems.homeScreen.item.path,
+        DropSpotRouteItems.parkingMapScreen.item.path,
+        DropSpotRouteItems.moreScreen.item.path
+      ].contains(location);
+    }
+
     int _getCurrentIndex() {
       final String location = GoRouterState.of(context).uri.toString();
       if (location.startsWith(DropSpotRouteItems.homeScreen.item.path)) {
@@ -43,28 +52,31 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
     void _onBottomTabItemTapped(int index) {
       switch (index) {
         case 0:
-          context.go(DropSpotRouteItems.homeScreen.item.path);
+          DropSpotRouter.routes.go(DropSpotRouteItems.homeScreen.item.path);
           break;
         case 1:
-          context.go(DropSpotRouteItems.parkingMapScreen.item.path);
+          DropSpotRouter.routes
+              .go(DropSpotRouteItems.parkingMapScreen.item.path);
           break;
         case 2:
-          context.go(DropSpotRouteItems.moreScreen.item.path);
+          DropSpotRouter.routes.go(DropSpotRouteItems.moreScreen.item.path);
           break;
       }
     }
 
-    return BottomNavigationBar(
-      currentIndex: _getCurrentIndex(),
-      items: _bottomTabItems
-          .map(
-            (item) => BottomNavigationBarItem(
-              icon: item.icon,
-              label: item.label,
-            ),
+    return _shouldShowBottomTab()
+        ? BottomNavigationBar(
+            currentIndex: _getCurrentIndex(),
+            items: _bottomTabItems
+                .map(
+                  (item) => BottomNavigationBarItem(
+                    icon: item.icon,
+                    label: item.label,
+                  ),
+                )
+                .toList(),
+            onTap: _onBottomTabItemTapped,
           )
-          .toList(),
-      onTap: _onBottomTabItemTapped,
-    );
+        : SizedBox.shrink();
   }
 }

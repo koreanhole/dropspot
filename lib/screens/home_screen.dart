@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:dropspot/base/drop_spot_router.dart';
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/dummy_recognized_parking_level_text.dart';
@@ -83,12 +84,8 @@ class _AddParkingManualSpotButton extends SpeedDialChild {
               return;
             }
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ManualAddParkingScreen(),
-              ),
-            );
+            DropSpotRouter.routes
+                .push(DropSpotRouteItems.manualAddParkingScreen.item.path);
           },
           child: Icon(Icons.library_add),
           shape: CircleBorder(),
@@ -102,11 +99,8 @@ class _AddParkingImageSpotButton extends SpeedDialChild {
             if (context.mounted == false) {
               return;
             }
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CameraScreen()),
-            );
+            DropSpotRouter.routes
+                .push(DropSpotRouteItems.cameraScreen.item.path);
           },
           child: Icon(Icons.add_a_photo),
           shape: CircleBorder(),
@@ -123,7 +117,7 @@ class _DeleteParkingSpotButton extends SpeedDialChild {
                 title: Text("주차 위치를 삭제할까요?"),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.pop(context, false),
+                    onPressed: () => DropSpotRouter.routes.pop(context),
                     child: const Text("아니오"),
                   ),
                   TextButton(
@@ -131,7 +125,7 @@ class _DeleteParkingSpotButton extends SpeedDialChild {
                       await context
                           .read<ParkingInfoProvider>()
                           .deleteParkingInfo();
-                      if (context.mounted) Navigator.pop(context, true);
+                      if (context.mounted) DropSpotRouter.routes.pop(context);
                     },
                     child: const Text(
                       "삭제",

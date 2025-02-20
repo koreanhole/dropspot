@@ -5,7 +5,6 @@ import 'package:dropspot/base/drop_spot_router.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:home_widget/home_widget.dart';
 import 'package:logger/web.dart';
 import 'package:provider/provider.dart';
 

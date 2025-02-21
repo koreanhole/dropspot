@@ -3,6 +3,8 @@ import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/info_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:logger/web.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const moreScreenLabelTextStyle = TextStyle(
@@ -34,9 +36,53 @@ class MoreScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(height: 24),
-              _RecognizedTextToggle(),
+              // _RecognizedTextToggle(),
+              // SizedBox(height: 16),
+              _AppRating(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AppRating extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final inAppReviewInstance = InAppReview.instance;
+        if (await inAppReviewInstance.isAvailable()) {
+          inAppReviewInstance.requestReview();
+        } else {
+          Logger().e("In app reivew is not available");
+          inAppReviewInstance.openStoreListing(appStoreId: "6741436582");
+        }
+      },
+      child: InfoCard(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "앱을 평가해주세요.",
+                  style: moreScreenLabelTextStyle,
+                ),
+                SizedBox(height: 2),
+                Text(
+                  "사용하면서 만족했던 점, 불편한 점에 대해 피드백해 주세요.",
+                  style: moreScreenSublabelTextStyle,
+                )
+              ],
+            ),
+            Icon(
+              Icons.open_in_new_outlined,
+            ),
+          ],
         ),
       ),
     );

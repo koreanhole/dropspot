@@ -10,7 +10,7 @@ class CameraScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DropSpotAppBar(
-        title: "사진으로 주차 위치 추가",
+        title: "",
       ),
       backgroundColor: backgroundColor,
       body: ParkingCameraPreview(),

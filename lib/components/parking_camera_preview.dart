@@ -62,7 +62,7 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
 
     return SafeArea(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           _cameraController != null && _cameraController!.value.isInitialized
               ? CameraAspectRatioPreset(
@@ -85,6 +85,8 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
                     child: CircularProgressIndicator(),
                   ),
                 ),
+          SizedBox(height: 16),
+          Text("주차한 위치가 잘 보이는 기둥을 찍어주세요."),
           SizedBox(height: 16),
           _CameraZoomSlider(cameraController: _cameraController),
           SizedBox(height: 16),
@@ -111,9 +113,9 @@ class _CameraZoomSlider extends StatefulWidget {
 }
 
 class _CameraZoomSliderState extends State<_CameraZoomSlider> {
-  double minZoomLevel = 1.0;
+  double minZoomLevel = 2.0;
   double maxZoomLevel = 10.0;
-  double currentZoomLevel = 1.0;
+  double currentZoomLevel = 2.0;
 
   @override
   void initState() {

@@ -1,5 +1,4 @@
 import 'package:dropspot/base/theme/colors.dart';
-import 'package:dropspot/base/theme/radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -27,20 +26,22 @@ class DropSpotSnackBar {
     );
   }
 
-  static void _showDropSpotSnackBar(
+  static Future<void> _showDropSpotSnackBar(
     BuildContext context,
     String message,
     Widget icon,
-  ) {
-    HapticFeedback.lightImpact();
+  ) async {
     showTopSnackBar(
       Overlay.of(context),
       _DropSpotSnackBarContainer(
         message: message,
         icon: icon,
       ),
-      padding: EdgeInsets.only(top: 8, left: 80, right: 80),
+      padding: EdgeInsets.only(top: 8, left: 70, right: 70),
     );
+    HapticFeedback.lightImpact();
+    await Future.delayed(Duration(milliseconds: 130));
+    HapticFeedback.lightImpact();
   }
 }
 
@@ -80,18 +81,24 @@ class _DropSpotSnackBarContainer extends StatelessWidget {
               bottom: 0,
               left: 0,
               child: Center(
-                child: icon,
+                child: SizedBox(
+                  height: 24,
+                  child: icon,
+                ),
               ),
             ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 12),
-                child: Text(
-                  message,
+                child: DefaultTextStyle(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     fontSize: 16,
+                    color: Colors.black,
                   ),
+                  child: Text(message),
                 ),
               ),
             ),

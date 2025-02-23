@@ -44,7 +44,7 @@ class _ParkingMapScreenState extends State<ParkingMapScreen> {
         onAuthFailed: (exception) {
           Logger().e('Map Auth Failed: $exception');
         });
-    await LocationUtil().requestLocationPermission();
+    await LocationUtil().requestLocationPermission(context);
     setState(() {
       _isMapInitialized = true;
     });

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dropspot/base/bottom_sheet.dart';
 import 'package:dropspot/base/drop_spot_app_bar.dart';
 import 'package:dropspot/base/drop_spot_horizontal_page_view.dart';
+import 'package:dropspot/base/drop_spot_snack_bar.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
 import 'package:dropspot/components/info_card.dart';
@@ -169,6 +170,9 @@ class _AppRating extends StatelessWidget {
           inAppReviewInstance.requestReview();
         } else {
           Logger().e("In app reivew is not available");
+          if (context.mounted == true) {
+            DropSpotSnackBar.showFailureSnackBar(context, "리뷰를 남길 수 없습니다.");
+          }
           inAppReviewInstance.openStoreListing(appStoreId: "6741436582");
         }
       },

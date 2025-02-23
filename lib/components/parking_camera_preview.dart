@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dropspot/base/drop_spot_snack_bar.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
@@ -32,18 +33,24 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
   }
 
   Future<void> _initializeCamera() async {
-    await Permission.camera.request();
-    final cameras = await availableCameras();
-    _cameraController = CameraController(
-      cameras[0], // 첫 번째 카메라 사용
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
+    try {
+      await Permission.camera.request();
+      final cameras = await availableCameras();
+      _cameraController = CameraController(
+        cameras[0], // 첫 번째 카메라 사용
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
 
-    await _cameraController?.initialize();
-    await _cameraController?.setFlashMode(FlashMode.off);
-    await _cameraController?.setExposureMode(ExposureMode.auto);
-    setState(() {});
+      await _cameraController?.initialize();
+      await _cameraController?.setFlashMode(FlashMode.off);
+      await _cameraController?.setExposureMode(ExposureMode.auto);
+      setState(() {});
+    } catch (exception) {
+      if (context.mounted) {
+        DropSpotSnackBar.showFailureSnackBar(context, "카메라를 사용할 수 없습니다.");
+      }
+    }
   }
 
   @override
@@ -56,6 +63,7 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
             .setParkingImageInfo(File(image.path));
       }
       if (context.mounted) {
+        DropSpotSnackBar.showSuccessSnackBar(context, "주차위치를 추가했습니다.");
         Navigator.pop(context);
       }
     }
@@ -113,9 +121,9 @@ class _CameraZoomSlider extends StatefulWidget {
 }
 
 class _CameraZoomSliderState extends State<_CameraZoomSlider> {
-  double minZoomLevel = 2.0;
+  double minZoomLevel = 3.0;
   double maxZoomLevel = 10.0;
-  double currentZoomLevel = 2.0;
+  double currentZoomLevel = 3.0;
 
   @override
   void initState() {

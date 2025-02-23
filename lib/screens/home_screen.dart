@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:dropspot/base/drop_spot_router.dart';
+import 'package:dropspot/base/drop_spot_snack_bar.dart';
 import 'package:dropspot/base/extensions.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/components/dummy_recognized_parking_level_text.dart';
@@ -122,7 +123,13 @@ class _DeleteParkingSpotButton extends SpeedDialChild {
                       await context
                           .read<ParkingInfoProvider>()
                           .deleteParkingInfo();
-                      if (context.mounted) DropSpotRouter.routes.pop(context);
+                      if (context.mounted != false) {
+                        DropSpotSnackBar.showSuccessSnackBar(
+                          context,
+                          "주차 위치를 삭제했습니다.",
+                        );
+                        DropSpotRouter.routes.pop(context);
+                      }
                     },
                     child: const Text(
                       "삭제",

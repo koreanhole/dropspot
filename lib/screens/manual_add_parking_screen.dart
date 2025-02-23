@@ -1,5 +1,6 @@
 import 'package:dropspot/base/data/parking_info.dart';
 import 'package:dropspot/base/drop_spot_app_bar.dart';
+import 'package:dropspot/base/drop_spot_snack_bar.dart';
 import 'package:dropspot/base/string_util.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/base/theme/radius.dart';
@@ -87,7 +88,13 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
             child: const Text("아니오"),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () {
+              DropSpotSnackBar.showFailureSnackBar(
+                context,
+                "삭제되었습니다.",
+              );
+              Navigator.pop(context, true);
+            },
             child: const Text(
               "삭제",
               style: TextStyle(color: Colors.red),
@@ -259,6 +266,10 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
                               parkedDateTime: DateTime.now(),
                             ),
                           );
+                      DropSpotSnackBar.showSuccessSnackBar(
+                        context,
+                        "주차 위치를 추가했습니다.",
+                      );
                       Navigator.of(context).pop();
                     }
                   },

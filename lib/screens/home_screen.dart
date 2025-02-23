@@ -81,7 +81,6 @@ class _AddParkingManualSpotButton extends SpeedDialChild {
             if (context.mounted == false) {
               return;
             }
-
             DropSpotRouter.routes
                 .push(DropSpotRouteItems.manualAddParkingScreen.item.path);
           },

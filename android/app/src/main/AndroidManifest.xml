@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  android:foregroundServiceType="location" />
     <application
-        android:label="주차 도사"
+        android:label="주차의 도사"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

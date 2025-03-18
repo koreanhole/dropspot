@@ -3,6 +3,8 @@ PODS:
     - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_naver_map (1.3.0):
     - Flutter
@@ -89,6 +91,7 @@ PODS:
 DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_naver_map (from `.symlinks/plugins/flutter_naver_map/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -125,6 +128,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_links/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_naver_map:
@@ -153,6 +158,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_links: f3e17e4ee5e357b39d8b95290a9b2c299fca71c6
   camera_avfoundation: dd002b0330f4981e1bbcb46ae9b62829237459a4
+  device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_naver_map: d31b1884517151e7b3121e3b24c18733ef4e4387
   geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1

@@ -9,7 +9,6 @@ import 'package:dropspot/base/theme/radius.dart';
 import 'package:dropspot/components/info_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:logger/web.dart';
 import 'package:shared_preferences/shared_preferences.dart';

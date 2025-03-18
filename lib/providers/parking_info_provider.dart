@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dropspot/base/data/parking_info.dart';
+import 'package:dropspot/base/device_info_util.dart';
 import 'package:exif/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -210,6 +211,14 @@ class ParkingInfoProvider with ChangeNotifier {
   Future<void> updateWidgetParkedLevel(int? parkedLevel) async {
     if (parkedLevel == null) {
       Logger().i("parkedLevel is null");
+      return;
+    }
+    if (Platform.isIOS == false) {
+      Logger().i("Not ios. No need to update widget data");
+      return;
+    }
+    if ((await DeviceInfoUtil.getIOSMajorVersion() ?? 0) < 17) {
+      Logger().i("Not supported IOS version");
       return;
     }
     Logger().i("updateWidget parked level: $parkedLevel");

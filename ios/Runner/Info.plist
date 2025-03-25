@@ -46,6 +46,7 @@
 		<string>kakaomap</string>
 		<string>nmap</string>
 		<string>tmap</string>
+		<string>dropspot</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

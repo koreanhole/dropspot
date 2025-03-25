@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:dropspot/base/drop_spot_router.dart';
+import 'package:dropspot/base/flutter_channel/flutter_channel_helper.dart';
 import 'package:dropspot/base/theme/colors.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,14 @@ class _DropspotAppState extends State<DropspotApp> {
         },
       );
     });
+  }
+
+  Future<void> initializeFlutterChannel() async {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        FlutterChannelHelper().registerHandler();
+      },
+    );
   }
 
   void terminateApplink() {

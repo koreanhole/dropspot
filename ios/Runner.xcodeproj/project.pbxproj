@@ -14,7 +14,9 @@
 		911B5D0F2D5CE08F00C19E7B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 911B5D0E2D5CE08F00C19E7B /* WidgetKit.framework */; };
 		911B5D112D5CE08F00C19E7B /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 911B5D102D5CE08F00C19E7B /* SwiftUI.framework */; };
 		911B5D1C2D5CE09100C19E7B /* LockScreenWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 911B5D0D2D5CE08F00C19E7B /* LockScreenWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		915418882D89A3CA00A7C95F /* AppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915418872D89A3C100A7C95F /* AppShortcuts.swift */; };
+		915418882D89A3CA00A7C95F /* DropSpotAppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 915418872D89A3C100A7C95F /* DropSpotAppIntents.swift */; };
+		9174045D2D92D8440057A48E /* FlutterMethodChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9174045C2D92D83B0057A48E /* FlutterMethodChannel.swift */; };
+		9174045F2D92D9B20057A48E /* DropSpotAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9174045E2D92D9AB0057A48E /* DropSpotAppShortcuts.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -82,7 +84,9 @@
 		911B5D0D2D5CE08F00C19E7B /* LockScreenWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LockScreenWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		911B5D0E2D5CE08F00C19E7B /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		911B5D102D5CE08F00C19E7B /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		915418872D89A3C100A7C95F /* AppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShortcuts.swift; sourceTree = "<group>"; };
+		915418872D89A3C100A7C95F /* DropSpotAppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSpotAppIntents.swift; sourceTree = "<group>"; };
+		9174045C2D92D83B0057A48E /* FlutterMethodChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlutterMethodChannel.swift; sourceTree = "<group>"; };
+		9174045E2D92D9AB0057A48E /* DropSpotAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropSpotAppShortcuts.swift; sourceTree = "<group>"; };
 		91E9538D2D676BC6006F5E0B /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		91E9538E2D676C0B006F5E0B /* LockScreenWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LockScreenWidgetExtension.entitlements; sourceTree = "<group>"; };
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Flutter/Debug.xcconfig; sourceTree = "<group>"; };
@@ -221,7 +225,9 @@
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
 				97C147021CF9000F007C117D /* Info.plist */,
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
-				915418872D89A3C100A7C95F /* AppShortcuts.swift */,
+				915418872D89A3C100A7C95F /* DropSpotAppIntents.swift */,
+				9174045E2D92D9AB0057A48E /* DropSpotAppShortcuts.swift */,
+				9174045C2D92D83B0057A48E /* FlutterMethodChannel.swift */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
@@ -505,7 +511,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
-				915418882D89A3CA00A7C95F /* AppShortcuts.swift in Sources */,
+				9174045F2D92D9B20057A48E /* DropSpotAppShortcuts.swift in Sources */,
+				9174045D2D92D8440057A48E /* FlutterMethodChannel.swift in Sources */,
+				915418882D89A3CA00A7C95F /* DropSpotAppIntents.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

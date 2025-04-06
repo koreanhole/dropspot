@@ -17,14 +17,14 @@ struct AddParkingSpotWithPhotoIntent: AppIntent {
     
     // 단축어에 대한 설명 및 카테고리 지정
     static var description = IntentDescription(
-        "주차 위치를 추가합니다.",
-        categoryName: "주차 위치 추가"
+        "주차의 도사 위치를 추가합니다.",
+        categoryName: "주차의 도사 위치 추가"
     )
     
     @MainActor
-    func perform() async throws -> some IntentResult & OpensIntent {
+    func perform() async throws -> some IntentResult {
         let url = URL(string: "dropspot://home_screen")!
         EnvironmentValues().openURL(url)
-        return .result(opensIntent: OpenURLIntent(url))
+        return .result()
     }
 }

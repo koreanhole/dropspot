@@ -4,7 +4,6 @@ import 'package:dropspot/screens/camera_screen.dart';
 import 'package:dropspot/screens/home_screen.dart';
 import 'package:dropspot/screens/manual_add_parking_screen.dart';
 import 'package:dropspot/screens/more_screen.dart';
-import 'package:dropspot/screens/parking_map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,12 +30,6 @@ enum DropSpotRouteItems {
     DropSpotRoute(
       path: '/more_screen',
       screen: MoreScreen(),
-    ),
-  ),
-  parkingMapScreen(
-    DropSpotRoute(
-      path: '/parking_map_screen',
-      screen: ParkingMapScreen(),
     ),
   );
 

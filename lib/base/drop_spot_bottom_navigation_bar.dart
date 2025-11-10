@@ -13,11 +13,6 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
       screen: DropSpotRouteItems.homeScreen.item.screen,
     ),
     BottomTabItem(
-      label: '공영주차장',
-      icon: Icon(Icons.map),
-      screen: DropSpotRouteItems.parkingMapScreen.item.screen,
-    ),
-    BottomTabItem(
       label: '더보기',
       icon: Icon(Icons.more_horiz),
       screen: DropSpotRouteItems.moreScreen.item.screen,
@@ -30,7 +25,6 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
       final String location = GoRouterState.of(context).uri.toString();
       return [
         DropSpotRouteItems.homeScreen.item.path,
-        DropSpotRouteItems.parkingMapScreen.item.path,
         DropSpotRouteItems.moreScreen.item.path
       ].contains(location);
     }
@@ -40,11 +34,8 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
       if (location.startsWith(DropSpotRouteItems.homeScreen.item.path)) {
         return 0;
       }
-      if (location.startsWith(DropSpotRouteItems.parkingMapScreen.item.path)) {
-        return 1;
-      }
       if (location.startsWith(DropSpotRouteItems.moreScreen.item.path)) {
-        return 2;
+        return 1;
       }
       return 0;
     }
@@ -55,10 +46,6 @@ class DropSpotBottomNavigationBar extends StatelessWidget {
           DropSpotRouter.routes.go(DropSpotRouteItems.homeScreen.item.path);
           break;
         case 1:
-          DropSpotRouter.routes
-              .go(DropSpotRouteItems.parkingMapScreen.item.path);
-          break;
-        case 2:
           DropSpotRouter.routes.go(DropSpotRouteItems.moreScreen.item.path);
           break;
       }

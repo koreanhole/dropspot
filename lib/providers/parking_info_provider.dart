@@ -69,9 +69,23 @@ class ParkingInfoProvider with ChangeNotifier {
   Future<void> _deleteAllParkingImage() async {
     final Directory directory = await getApplicationDocumentsDirectory();
     final List<FileSystemEntity> files = directory.listSync();
-    for (int i = 0; i < files.length; i++) {
-      if (files[i] is File && files[i].path.contains(imageFileName)) {
-        await files[i].delete();
+
+    if (Platform.isAndroid) {
+      final RegExp manualImagePattern = RegExp(r'^-?\d{1,2}\.png$');
+      for (final file in files) {
+        if (file is File) {
+          final fileName = file.path.split('/').last;
+          if (fileName.contains(imageFileName) ||
+              manualImagePattern.hasMatch(fileName)) {
+            await file.delete();
+          }
+        }
+      }
+    } else {
+      for (int i = 0; i < files.length; i++) {
+        if (files[i] is File && files[i].path.contains(imageFileName)) {
+          await files[i].delete();
+        }
       }
     }
   }
@@ -118,7 +132,7 @@ class ParkingInfoProvider with ChangeNotifier {
   }
 
   Future<void> _initializeParkingInfo() async {
-    // 먼저 SharedPreferences에서 수동 등록한 parkingInfo를 불러옴
+    // 1. Load manual info from SharedPreferences first.
     final savedManualInfo = await _loadParkingInfoFromPreferences();
     if (savedManualInfo != null) {
       _parkingInfo = savedManualInfo;
@@ -128,31 +142,41 @@ class ParkingInfoProvider with ChangeNotifier {
       return;
     }
 
-    // 저장된 수동 등록 정보가 없으면 이미지 파일에서 parkingInfo를 불러옴
+    // 2. If no manual info, find the latest image file in the documents directory.
     final Directory directory = await getApplicationDocumentsDirectory();
-    final List<FileSystemEntity> files = directory.listSync()
-      ..sort((a, b) {
-        // 수정된 시간 기준으로 정렬 (최신 파일이 맨 앞으로)
-        return b.statSync().modified.compareTo(a.statSync().modified);
-      });
+    final RegExp manualImagePattern = RegExp(r'^-?\d{1,2}\.png$');
+    List<File> parkingImages = directory.listSync().where((item) {
+      if (item is! File) return false;
+      final fileName = item.path.split('/').last;
+      return fileName.contains(imageFileName) ||
+          manualImagePattern.hasMatch(fileName);
+    }).cast<File>().toList();
 
-    // 가장 최신 파일 로드
-    final latestFile = files.isNotEmpty ? files.first : null;
-    if (latestFile != null &&
-        latestFile is File &&
-        latestFile.path.contains(imageFileName)) {
-      await setParkingImageInfo(latestFile);
-      notifyListeners();
-      Logger().d('Latest ParkingImage loaded: ${_image!.path}');
-    } else {
-      Logger().d("No saved ParkingImage");
+    if (parkingImages.isEmpty) {
+      Logger().d("No saved parking images found.");
+      return;
     }
 
-    // 최신 파일 제외 나머지 삭제
-    for (int i = 1; i < files.length; i++) {
-      if (files[i] is File) {
-        await files[i].delete(); // 파일 삭제
-      }
+    // Sort by date to find the latest.
+    parkingImages
+        .sort((a, b) => b.statSync().modified.compareTo(a.statSync().modified));
+
+    final File latestImage = parkingImages.first;
+
+    // 3. Load info from the latest image without creating a copy.
+    // This re-uses the logic from setParkingImageInfo but without the file-writing part.
+    _image = latestImage;
+    _parkingInfo = ParkingInfo(
+      parkedLevel: await _getParkingLevelFromImage(latestImage),
+      parkedDateTime: await _getParkingImageDateTimeFromImage(latestImage),
+    );
+    notifyListeners();
+    Logger().d('Initialized with latest image: ${latestImage.path}');
+
+    // 4. Delete all other parking images.
+    for (int i = 1; i < parkingImages.length; i++) {
+      await parkingImages[i].delete();
+      Logger().d('Deleted old parking image: ${parkingImages[i].path}');
     }
   }
 
@@ -193,14 +217,18 @@ class ParkingInfoProvider with ChangeNotifier {
     // asset의 데이터를 ByteData 형태로 읽어옵니다.
     final byteData = await rootBundle.load(assetPath);
 
-    // 임시 디렉토리를 가져옵니다.
-    final tempDir = await getTemporaryDirectory();
+    final Directory directory;
+    if (Platform.isAndroid) {
+      directory = await getApplicationDocumentsDirectory();
+    } else {
+      directory = await getTemporaryDirectory();
+    }
 
     // fileName이 제공되지 않으면 기본 파일명 지정
     final name = fileName ?? assetPath.split('/').last;
 
-    // 임시 파일의 경로 생성
-    final file = File('${tempDir.path}/$name');
+    // 파일의 경로 생성
+    final file = File('${directory.path}/$name');
 
     // ByteData를 Uint8List로 변환하여 파일에 기록
     await file.writeAsBytes(byteData.buffer.asUint8List(), flush: true);

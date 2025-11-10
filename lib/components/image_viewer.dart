@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dropspot/components/camera_aspect_ratio_preset.dart';
 import 'package:dropspot/providers/parking_info_provider.dart';
@@ -19,12 +20,26 @@ class ImageViewer extends StatelessWidget {
 
     final parkingImagePath =
         context.watch<ParkingInfoProvider>().parkingImagePath;
+
+    Widget imageWidget;
+    if (parkingImagePath.startsWith('assets')) {
+      imageWidget = Image.asset(
+        parkingImagePath,
+        fit: BoxFit.cover,
+      );
+    } else {
+      imageWidget = Image.file(
+        File(parkingImagePath),
+        fit: BoxFit.cover,
+      );
+    }
+
     return CameraAspectRatioPreset(
       child: InteractiveViewer(
         minScale: minImageScale,
         maxScale: maxImageScale,
         key: ValueKey(
-          DateTime.now().millisecondsSinceEpoch,
+          parkingImagePath,
         ),
         transformationController: transformationController,
         onInteractionEnd: (details) {
@@ -32,10 +47,7 @@ class ImageViewer extends StatelessWidget {
             transformationController.value = Matrix4.identity();
           });
         },
-        child: Image.asset(
-          parkingImagePath,
-          fit: BoxFit.cover,
-        ),
+        child: imageWidget,
       ),
     );
   }

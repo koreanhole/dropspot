@@ -82,7 +82,12 @@ class _ParkingCameraPreview extends State<ParkingCameraPreview> {
                         child: SizedBox(
                           width: _cameraController!.value.previewSize!.height,
                           height: _cameraController!.value.previewSize!.width,
-                          child: CameraPreview(_cameraController!),
+                          child: Platform.isAndroid
+                              ? RotatedBox(
+                                  quarterTurns: 1,
+                                  child: CameraPreview(_cameraController!),
+                                )
+                              : CameraPreview(_cameraController!),
                         ),
                       ),
                     ),

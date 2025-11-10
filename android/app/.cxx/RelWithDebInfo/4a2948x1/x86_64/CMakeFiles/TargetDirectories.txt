@@ -1,0 +1,2 @@
+/Users/koreanhole/development/dropspot/android/app/.cxx/RelWithDebInfo/4a2948x1/x86_64/CMakeFiles/edit_cache.dir
+/Users/koreanhole/development/dropspot/android/app/.cxx/RelWithDebInfo/4a2948x1/x86_64/CMakeFiles/rebuild_cache.dir

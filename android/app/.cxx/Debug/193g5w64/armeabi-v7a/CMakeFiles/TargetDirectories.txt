@@ -1,0 +1,2 @@
+/Users/koreanhole/development/dropspot/android/app/.cxx/Debug/193g5w64/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/koreanhole/development/dropspot/android/app/.cxx/Debug/193g5w64/armeabi-v7a/CMakeFiles/rebuild_cache.dir

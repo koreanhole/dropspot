@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
+import 'package:dropspot/base/activity_recognition_handler.dart';
 import 'package:dropspot/base/drop_spot_router.dart';
 import 'package:dropspot/base/flutter_channel/flutter_channel_helper.dart';
 import 'package:dropspot/base/theme/colors.dart';
@@ -39,12 +40,19 @@ class _DropspotAppState extends State<DropspotApp> {
   void initState() {
     super.initState();
     initializeApplink();
+    initializeActivityRecognition();
   }
 
   @override
   void dispose() {
     terminateApplink();
     super.dispose();
+  }
+
+  Future<void> initializeActivityRecognition() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ActivityRecognitionHandler().init();
+    });
   }
 
   Future<void> initializeApplink() async {

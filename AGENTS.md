@@ -52,3 +52,7 @@ lib/
     ├── manual_add_parking_screen.dart    # 슬라이더, 버튼 등을 통해 수동으로 층수를 세팅하는 화면
     └── more_screen.dart                  # 앱 내 부가 정보, 설정 화면
 ```
+
+## 🛠 개발 환경 (Development Environment)
+- **버전 관리**: `fvm` (Flutter Version Management)을 사용하여 Flutter SDK 버전을 관리합니다.
+- **명령 규칙**: 모든 Flutter 관련 명령은 반드시 `fvm` prefix를 사용해야 합니다. (예: `fvm flutter run`, `fvm flutter pub get`)

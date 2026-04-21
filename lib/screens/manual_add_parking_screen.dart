@@ -54,6 +54,9 @@ class _ManualAddParkingScreenState extends State<ManualAddParkingScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String jsonList = json.encode(manualParkingItems);
     await prefs.setString(_prefsKey, jsonList);
+    if (mounted) {
+      context.read<ParkingInfoProvider>().syncWearData(manualItems: manualParkingItems);
+    }
   }
 
   // 한 항목에서 길게 누르면 모든 항목이 삭제 모드로 전환됩니다.

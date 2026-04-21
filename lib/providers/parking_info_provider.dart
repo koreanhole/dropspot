@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/web.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 
 const String imageFileName = 'parking_image.jpg';
 const String defaultImagePath = 'assets/images/default_parking_image.png';
@@ -23,8 +23,37 @@ class ParkingInfoProvider with ChangeNotifier {
   String get parkingImagePath => _image?.path ?? defaultImagePath;
   ParkingInfo? get parkingInfo => _parkingInfo;
 
+  static const MethodChannel _wearChannel = MethodChannel('com.koreanhole.pluto.dropspot/wear');
+
   ParkingInfoProvider() {
     _initializeParkingInfo();
+    _setupWearListener();
+  }
+
+  void _setupWearListener() {
+    _wearChannel.setMethodCallHandler((call) async {
+      if (call.method == 'onWatchParkedLevelUpdated') {
+        final level = call.arguments['parkedLevel'] as int?;
+        if (level != null) {
+          // You receive the updated level from watch, update here
+          setParkingManualInfo(ParkingInfo(
+            parkedLevel: level,
+            parkedDateTime: DateTime.now(),
+          ));
+        }
+      }
+    });
+  }
+
+  Future<void> syncWearData({List<int>? manualItems, int? parkedLevel}) async {
+    try {
+      await _wearChannel.invokeMethod('syncParkingData', {
+        if (manualItems != null) 'manualParkingItems': manualItems,
+        if (parkedLevel != null) 'parkedLevel': parkedLevel,
+      });
+    } catch (e) {
+      Logger().e("Failed to sync wear data", error: e);
+    }
   }
 
   Future<void> setParkingImageInfo(File image) async {
@@ -39,6 +68,7 @@ class ParkingInfoProvider with ChangeNotifier {
       parkedDateTime: await _getParkingImageDateTimeFromImage(image),
     );
     updateWidgetParkedLevel(_parkingInfo?.parkedLevel);
+    syncWearData(parkedLevel: _parkingInfo?.parkedLevel);
     notifyListeners();
   }
 
@@ -53,6 +83,7 @@ class ParkingInfoProvider with ChangeNotifier {
     _parkingInfo = parkingInfo;
     await _saveParkingInfoToPreferences(parkingInfo);
     updateWidgetParkedLevel(_parkingInfo?.parkedLevel);
+    syncWearData(parkedLevel: _parkingInfo?.parkedLevel);
     notifyListeners();
   }
 
@@ -132,6 +163,20 @@ class ParkingInfoProvider with ChangeNotifier {
   }
 
   Future<void> _initializeParkingInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? itemsJson = prefs.getString('manualParkingItems');
+    if (itemsJson != null) {
+      try {
+        final List<dynamic> jsonList = json.decode(itemsJson);
+        final List<int> loadedList = jsonList.map((e) => e as int).toList();
+        syncWearData(manualItems: loadedList);
+      } catch (e) {
+        Logger().w("Failed to parse manualParkingItems");
+      }
+    } else {
+        syncWearData(manualItems: [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]);
+    }
+
     // 1. Load manual info from SharedPreferences first.
     final savedManualInfo = await _loadParkingInfoFromPreferences();
     if (savedManualInfo != null) {
